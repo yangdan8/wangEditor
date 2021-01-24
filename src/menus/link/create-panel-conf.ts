@@ -44,10 +44,10 @@ export default function (editor: Editor, text: string, link: string): PanelConf 
         if (isActive(editor)) {
             // 选区处于链接中，则选中整个菜单，再执行 insertHTML
             selectLinkElem()
-            editor.cmd.do('insertHTML', `<a href="${link}" target="_blank">${text}</a>`)
+            editor.cmd.do('insertHTML', `<a href="${link}" target="_blank">${text}</a>`, true)
         } else {
             // 选区未处于链接中，直接插入即可
-            editor.cmd.do('insertHTML', `<a href="${link}" target="_blank">${text}</a>`)
+            editor.cmd.do('insertHTML', `<a href="${link}" target="_blank">${text}</a>`, true)
         }
     }
 

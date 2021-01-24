@@ -18,7 +18,7 @@ class Command {
      * @param name name
      * @param value value
      */
-    public do(name: string, value?: string | DomElement): void {
+    public do(name: string, value?: string | DomElement, noAddEmptyRange?: boolean): void {
         const editor = this.editor
 
         if (editor.config.styleWithCSS) {
@@ -38,7 +38,7 @@ class Command {
         // 执行
         switch (name) {
             case 'insertHTML':
-                this.insertHTML(value as string)
+                this.insertHTML(value as string, noAddEmptyRange)
                 break
             case 'insertElem':
                 this.insertElem(value as DomElement)
@@ -61,7 +61,7 @@ class Command {
      * 插入 html
      * @param html html 字符串
      */
-    private insertHTML(html: string): void {
+    private insertHTML(html: string, noAddEmptyRange?: boolean): void {
         const editor = this.editor
         const range = editor.selection.getRange()
         if (range == null) return
@@ -69,6 +69,10 @@ class Command {
         if (this.queryCommandSupported('insertHTML')) {
             // W3C
             this.execCommand('insertHTML', html)
+            if (!noAddEmptyRange && html !== '&#8203;') {
+                editor.selection.saveRange()
+                editor.selection.createEmptyRange()
+            }
         } else if (range.insertNode) {
             // IE
             range.deleteContents()
