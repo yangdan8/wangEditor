@@ -87,6 +87,7 @@
     "less": "^3.11.1",
     "less-loader": "^6.0.0",
     "lint-staged": "^10.2.2",
+    "multiparty": "^4.2.2",
     "nodemon": "^2.0.6",
     "nyc": "^15.1.0",
     "postcss-loader": "^3.0.0",
