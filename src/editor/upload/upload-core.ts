@@ -96,7 +96,7 @@ function post<T extends Object>(url: string, option: PostOptionType<T>): XMLHttp
 
     // 发送请求
     xhr.send(option.formData || null)
-
+    console.log('调用xhr post----->', xhr, option.formData)
     return xhr
 }
 
