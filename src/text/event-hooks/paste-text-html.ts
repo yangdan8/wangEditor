@@ -100,7 +100,6 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
             editor.cmd.do('insertHTML', formatCode(pasteText))
             return
         }
-
         // 如果用户开启闭粘贴样式注释则将复制进来为url的直接转为链接 否则不转换
         //  在群中有用户提到关闭样式粘贴复制的文字进来后链接直接转为文字了，不符合预期，这里优化下
         if (urlRegex.test(pasteText) && pasteFilterStyle) {
