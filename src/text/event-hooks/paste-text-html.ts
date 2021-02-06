@@ -7,7 +7,7 @@ import Editor from '../../editor/index'
 import { getPasteText, getPasteHtml } from '../paste/paste-event'
 import { isFunction } from '../../utils/util'
 import { urlRegex } from '../../utils/const'
-import $, { DomElement } from '../../utils/dom-core'
+import { DomElement } from '../../utils/dom-core'
 
 /**
  * 格式化html
@@ -136,7 +136,9 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
                         editor.selection.createEmptyRange()
                         return
                     } else {
-                        $textEl.append($(html))
+                        //  $textEl.append($(html))
+                        //append会导致聊天记录或者input的内容跑到最后
+                        editor.cmd.do('insertHTML', `${html}`) // html
                     }
                     // 如果选区是空段落，移除空段落
                     if (isEmptyParagraph($topElem)) {
