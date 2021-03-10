@@ -5,6 +5,7 @@
 
 import $, { DomElement } from '../utils/dom-core'
 import Editor from './index'
+import { genEmbedContainerElem } from '../embed/container'
 
 class Command {
     public editor: Editor
@@ -133,6 +134,14 @@ class Command {
      */
     public queryCommandSupported(name: string): boolean {
         return document.queryCommandSupported(name)
+    }
+
+    public insertEmbed(key: string, data: any): void {
+        const embed = this.editor.embed.createEmbedInstance(key, data)
+        if (embed == null) return
+
+        const $elem = genEmbedContainerElem(embed)
+        this.insertElem($elem)
     }
 }
 

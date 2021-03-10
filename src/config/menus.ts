@@ -60,6 +60,7 @@ export default {
         'splitLine',
         'undo',
         'redo',
+        'formula',
     ],
 
     fontNames: [

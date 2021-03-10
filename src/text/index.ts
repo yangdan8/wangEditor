@@ -10,6 +10,7 @@ import { UA, throttle } from '../utils/util'
 import getChildrenJSON, { NodeListType } from './getChildrenJSON'
 import getHtmlByNodeList from './getHtmlByNodeList'
 import { EMPTY_P, EMPTY_P_LAST_REGEX, EMPTY_P_REGEX } from '../utils/const'
+import { renderHtml2ResultHtml, resultHtml2RenderHtml } from '../embed/parse'
 
 /** 按键函数 */
 type KeyBoardHandler = (event: KeyboardEvent) => unknown
@@ -138,6 +139,10 @@ class Text {
         // 没有 val ，则是获取 html
         if (val == null) {
             let html = $textElem.html()
+
+            // 处理 embed
+            html = renderHtml2ResultHtml(html, editor)
+
             // 未选中任何内容的时候点击“加粗”或者“斜体”等按钮，就得需要一个空的占位符 &#8203 ，这里替换掉
             html = html.replace(/\u200b/gm, '')
             // 去掉空行
@@ -186,6 +191,10 @@ class Text {
             val = `<p>${val}</p>`
         }
         val = val.replace(/\s+</g, '<')
+
+        // 处理 embed
+        val = resultHtml2RenderHtml(val, editor)
+
         $textElem.html(val)
 
         // 初始化选区，将光标定位到内容尾部

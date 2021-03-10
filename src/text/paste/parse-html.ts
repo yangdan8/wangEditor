@@ -3,8 +3,9 @@
  * @author wangfupeng
  */
 
-import { EMPTY_TAGS, IGNORE_TAGS, NECESSARY_ATTRS } from './tags'
+import { IGNORE_TAGS, NECESSARY_ATTRS } from './tags'
 import HtmlParser from '../../lib/simplehtmlparser.js'
+import { EMPTY_TAGS, genStartHtml, genEndHtml } from '../../lib/simplehtmlparser-helper'
 
 type AttrType = {
     name: string
@@ -47,41 +48,6 @@ function isIgnoreTag(tag: string, ignoreImg: boolean): boolean {
     }
 
     return false
-}
-
-/**
- * 为 tag 生成 html 字符串，开始部分
- * @param tag tag
- * @param attrs 属性
- */
-function genStartHtml(tag: string, attrs: AttrType[]): string {
-    let result = ''
-
-    // tag < 符号
-    result = `<${tag}`
-
-    // 拼接属性
-    let attrStrArr: string[] = []
-    attrs.forEach((attr: AttrType) => {
-        attrStrArr.push(`${attr.name}="${attr.value}"`)
-    })
-    if (attrStrArr.length > 0) {
-        result = result + ' ' + attrStrArr.join(' ')
-    }
-
-    // tag > 符号
-    const isEmpty = EMPTY_TAGS.has(tag) // 没有子节点或文本的标签，如 img
-    result = result + (isEmpty ? '/' : '') + '>'
-
-    return result
-}
-
-/**
- * 为 tag 生成 html 字符串，结尾部分
- * @param tag tag
- */
-function genEndHtml(tag: string) {
-    return `</${tag}>`
 }
 
 /**

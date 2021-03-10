@@ -7,3 +7,7 @@ declare class SimpleHtmlParser {
     parse(html: string, opt: any): void
 }
 export default SimpleHtmlParser
+export declare interface IAttr {
+    name: string
+    value: string
+}

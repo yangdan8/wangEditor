@@ -10,7 +10,7 @@ import SelectionAndRangeAPI from './selection'
 import CommandAPI from './command'
 import Text from '../text/index'
 import Menus from '../menus/index'
-import initDom from './init-fns/init-dom'
+import initDom, { parseContent } from './init-fns/init-dom'
 import initSelection from './init-fns/init-selection'
 import bindEvent from './init-fns/bind-event'
 import i18nextInit from './init-fns/i18next-init'
@@ -29,6 +29,9 @@ import DropListMenu from '../menus/menu-constructors/DropListMenu'
 import Panel from '../menus/menu-constructors/Panel'
 import PanelMenu from '../menus/menu-constructors/PanelMenu'
 import Tooltip from '../menus/menu-constructors/Tooltip'
+
+// embed
+import Embed from '../embed/index'
 
 let EDITOR_ID = 1
 
@@ -65,6 +68,7 @@ class Editor {
     public zIndex: ZIndex
     public change: Change
     public history: History
+    public embed: Embed
 
     // 实例销毁前需要执行的钩子集合
     private beforeDestroyHooks: Function[] = []
@@ -110,6 +114,7 @@ class Editor {
         this.zIndex = new ZIndex()
         this.change = new Change(this)
         this.history = new History(this)
+        this.embed = new Embed(this)
 
         const { disable, enable } = disableInit(this)
         this.disable = disable
@@ -159,6 +164,9 @@ class Editor {
 
         // 绑定事件
         bindEvent(this)
+
+        // 处理 content
+        parseContent(this)
 
         // 绑定监听的目标节点
         this.change.observe()

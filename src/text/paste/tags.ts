@@ -29,20 +29,6 @@ export const NECESSARY_ATTRS = new Map([
     ['th', ['colspan', 'rowspan']],
 ])
 
-// 没有子节点或文本的标签
-export const EMPTY_TAGS = new Set([
-    'area',
-    'base',
-    'basefont',
-    'br',
-    'col',
-    'hr',
-    'img',
-    'input',
-    'isindex',
-    'embed',
-])
-
 // 编辑区域顶级节点
 export const TOP_LEVEL_TAGS = new Set([
     'h1',

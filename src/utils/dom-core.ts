@@ -840,6 +840,16 @@ export class DomElement<T extends DomElementSelector = DomElementSelector> {
         const $node = this.elems[0]
         $node.scrollTo({ top })
     }
+
+    /**
+     * 封装 matches
+     * @param selector css selector
+     */
+    matches(selector: string): boolean {
+        if (this.length === 0 || !selector) return false
+        const elem = this.elems[0]
+        return elem.matches(selector)
+    }
 }
 
 // new 一个对象

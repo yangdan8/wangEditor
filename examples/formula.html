@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wangEditor example</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <p>
+        wangEditor demo
+    </p>
+    <div id="div1">
+        <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+        <p><span data-embed-key="formula" data-embed-value="f(x)=\int_{-\infty}^\infty\widehat f\xi\,e^{2\pi i\xi x}\,d\xi"></span></p>
+        <p>hello world</p>
+    </div>
+    <div>
+        <button id="btn-set-html">设置 html</button>
+    </div>
+
+    <ul>
+        <li>txt.html()</li>
+        <li>txt.text()</li>
+        <li>txt.getJSON() txt.setJSON()</li>
+        <li>粘贴</li>
+    </ul>
+
+    <script src="../dist/wangEditor.js"></script>
+    <script>
+        // 改为使用var声明，才能在window对象上获取到编辑器实例，方便e2e测试
+        var E = window.wangEditor
+        var editor = new E('#div1')
+
+        editor.config.onchange = function (newHtml) {
+            console.log('onchange', newHtml)
+        }
+        editor.config.showFullScreen = true
+        editor.create()
+
+        document.getElementById('btn-set-html').addEventListener('click', () => {
+            editor.txt.html(`<p>
+                hello world
+                <span data-embed-key="formula" data-embed-value="f(x)=\\int_{-\\infty}^\\infty\\widehat f\\xi\,e^{2\\pi i\\xi x}\\,d\\xi"></span>
+                公式
+            </p><p>你好</p>`)
+        })
+    </script>
+</body>
+
+</html>

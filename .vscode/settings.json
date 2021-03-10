@@ -8,7 +8,9 @@
         "config",
         "contenteditable",
         "elems",
+        "img",
         "js",
+        "katex",
         "keyscan",
         "middlewares",
         "mkdir",
@@ -22,8 +24,7 @@
         "wangeditor",
         "wangfupeng",
         "we",
-        "write",
-        "img"
+        "write"
     ],
     "typescript.tsdk": "node_modules/typescript/lib"
 }
