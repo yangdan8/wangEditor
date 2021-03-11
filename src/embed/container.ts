@@ -12,8 +12,18 @@ import { IEmbed } from './IEmbed'
  * @returns html
  */
 export function genEmbedContainerHtml(embedInstance: IEmbed): string {
+    const $container = genEmbedContainerElem(embedInstance)
+    return $container.outerHtml()
+}
+
+/**
+ * 生成 container elem
+ * @param embedInstance embed 实例
+ * @returns elem
+ */
+export function genEmbedContainerElem(embedInstance: IEmbed): DomElement {
     const id = embedInstance.id
-    const contentHtml = embedInstance.getRenderHtml()
+    const $elem = embedInstance.genRenderedElem()
 
     // block
     let tag = 'div'
@@ -24,21 +34,13 @@ export function genEmbedContainerHtml(embedInstance: IEmbed): string {
         className = 'we-embed-card-inline'
     }
 
-    const containerHtml = `<${tag} id="${id}" data-we-embed-card class="${className}" contenteditable="false">
-                            ${contentHtml}
-                        </${tag}>`
-
-    return containerHtml
-}
-
-/**
- * 生成 container elem
- * @param embedInstance embed 实例
- * @returns elem
- */
-export function genEmbedContainerElem(embedInstance: IEmbed): DomElement {
-    const containerHtml = genEmbedContainerHtml(embedInstance)
+    const containerHtml = `<${tag} id="${id}" data-we-embed-card class="${className}" contenteditable="false"></${tag}>`
     const $container = $(containerHtml)
+
+    //【注意】这里一定要用 append ，才能把 embed 生成的 elem 给**移动**过来
+    // append 本质就是移动（不是复制），而这里正需要复制
+    $container.append($elem)
+
     return $container
 }
 

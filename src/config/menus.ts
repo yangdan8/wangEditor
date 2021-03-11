@@ -56,11 +56,12 @@ export default {
         'image',
         'video',
         'table',
-        'code',
+        // 'code',
         'splitLine',
         'undo',
         'redo',
         'formula',
+        'code2',
     ],
 
     fontNames: [

@@ -12,10 +12,8 @@ export interface IEmbed {
     isBlock: boolean
     data: any
     readonly $container: DomElement // getter
-    getRenderHtml(): string
-    getResultHtml(): string
-    update(data: any): void
-    remove(): void
+    genRenderedElem(): DomElement
+    genResultHtml(): string
     onClick(event: MouseEvent): void
     onMouseEnter(event: MouseEvent): void
     onMouseLeave(event: MouseEvent): void

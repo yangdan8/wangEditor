@@ -622,6 +622,16 @@ export class DomElement<T extends DomElementSelector = DomElementSelector> {
     }
 
     /**
+     * 获取 outerHtml 包括当前元素的 html
+     * @returns outer html
+     */
+    outerHtml(): string {
+        const $div = $('<div></div>')
+        $div.append(this)
+        return $div.html()
+    }
+
+    /**
      * 获取元素 value
      */
     val(): string {

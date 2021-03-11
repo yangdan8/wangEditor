@@ -24,10 +24,11 @@ import LineHeight from './lineHeight/index'
 import Undo from './undo/index'
 import Redo from './redo/index'
 import Table from './table/index'
-import Code from './code'
+// import Code from './code'
 import SplitLine from './split-line/index'
 import Todo from './todo'
 import Formula from './formula/index'
+import Code2 from './code2/index'
 
 export type MenuListType = {
     [key: string]: any
@@ -55,8 +56,9 @@ export default {
     undo: Undo,
     redo: Redo,
     table: Table,
-    code: Code,
+    // code: Code,
     splitLine: SplitLine,
     todo: Todo,
     formula: Formula,
+    code2: Code2,
 }

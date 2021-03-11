@@ -17,8 +17,13 @@
         <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
         <p><span data-embed-key="formula" data-embed-value="f(x)=\int_{-\infty}^\infty\widehat f\xi\,e^{2\pi i\xi x}\,d\xi"></span></p>
         <p>hello world</p>
+        <pre><code class="javascript">function foo(items) {
+            var x = "All this is syntax highlighted";
+            return x;
+        }</code></pre>
+        <p>hello world 123</p>
     </div>
-    <div>
+    <div style="margin-top: 20px;">
         <button id="btn-set-html">设置 html</button>
     </div>
 
@@ -34,6 +39,7 @@
         // 改为使用var声明，才能在window对象上获取到编辑器实例，方便e2e测试
         var E = window.wangEditor
         var editor = new E('#div1')
+        editor.config.height = 500
 
         editor.config.onchange = function (newHtml) {
             console.log('onchange', newHtml)
@@ -43,10 +49,15 @@
 
         document.getElementById('btn-set-html').addEventListener('click', () => {
             editor.txt.html(`<p>
-                hello world
-                <span data-embed-key="formula" data-embed-value="f(x)=\\int_{-\\infty}^\\infty\\widehat f\\xi\,e^{2\\pi i\\xi x}\\,d\\xi"></span>
-                公式
-            </p><p>你好</p>`)
+                                hello world
+                                <span data-embed-key="formula" data-embed-value="f(x)=\\int_{-\\infty}^\\infty\\widehat f\\xi\,e^{2\\pi i\\xi x}\\,d\\xi"></span>
+                                公式
+                            </p>
+                            <p>你好</p>
+                            <pre><code class="javascript">function foo(items) {
+    var x = "All this is syntax highlighted";
+    return x;
+}</code></pre>`)
         })
     </script>
 </body>

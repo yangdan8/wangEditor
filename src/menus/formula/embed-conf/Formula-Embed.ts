@@ -15,7 +15,7 @@ class FormulaEmbed implements IEmbed {
     id: string
     public embedKey: string = EMBED_KEY
     public isBlock: boolean = false // display: inline-block
-    public data: any = ''
+    public data: string = ''
 
     constructor(data: string) {
         this.id = getRandom(`${EMBED_KEY}-`) // id 会对应到 embed 容器的 DOM 节点
@@ -28,37 +28,26 @@ class FormulaEmbed implements IEmbed {
      * 生成 render html 以渲染到编辑区域
      * @returns html 代码
      */
-    public getRenderHtml(): string {
+    public genRenderedElem(): DomElement {
         const data = this.data as string
-
         const html = katex.renderToString(data, {
             throwOnError: false,
         })
-        return html
+        return $(html)
     }
     /**
      * 获取 result html ，执行 txt.html() 时触发
      * @returns html 代码
      */
-    public getResultHtml(): string {
+    public genResultHtml(): string {
         const embedKey = this.embedKey
         const data = this.data
 
         // 要和 selector getData() 对应好
         return `<span data-embed-key="${embedKey}" data-embed-value="${data}"></span>`
     }
-    public update(data: any): void {
-        if (this.$container.length === 0) return
-
-        this.data = data
-        const htmlStr = this.getRenderHtml()
-        this.$container.html(htmlStr)
-    }
-    public remove(): void {
-        alert(`remove ${this.id}`)
-    }
     public onClick(event: MouseEvent): void {
-        console.log('embed click', this.id, this.data)
+        alert(`可以弹出修改 data 的输入框 ${this.id}`)
     }
     public onMouseEnter(event: MouseEvent): void {
         console.log('embed mouse enter')

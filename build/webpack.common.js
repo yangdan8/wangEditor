@@ -27,7 +27,7 @@ module.exports = {
                 use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader'],
             },
             {
-                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+                test: /\.(woff2?|ttf|eot|otf)(\?.*)?$/,
                 use: [
                     {
                         loader: 'url-loader',

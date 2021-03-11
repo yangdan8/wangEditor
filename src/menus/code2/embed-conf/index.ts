@@ -1,5 +1,5 @@
 /**
- * @description formula embed conf
+ * @description code embed conf
  * @author wangfupeng
  */
 
@@ -7,7 +7,7 @@ import { IEmbedConf, IEmbed } from '../../../embed/IEmbed'
 import { EMBED_KEY } from './const'
 import { IAttr } from '../../../lib/simplehtmlparser'
 import $ from '../../../utils/dom-core'
-import FormulaEmbed from './Formula-Embed'
+import CodeEmbed from './Code-Embed'
 
 /**
  * 判断 elem 是否符合 formula 的 result html
@@ -15,12 +15,8 @@ import FormulaEmbed from './Formula-Embed'
  * @param attrs elem attrs
  */
 function isEmbedResultHtml(tag: string, attrs: IAttr[]): boolean {
-    // 判断 elem 是否符合 'span[data-embed-key="formula"]'
-    if (tag === 'span') {
-        return attrs.some(attr => {
-            return attr.name === 'data-embed-key' && attr.value === EMBED_KEY
-        })
-    }
+    // 代码块的 resultHtml 是 '<pre><code>xxxx</code></pre>'
+    if (tag === 'pre') return true
     return false
 }
 
@@ -30,8 +26,7 @@ function isEmbedResultHtml(tag: string, attrs: IAttr[]): boolean {
  */
 function getDataByResultHtml(resultHtml: string): any {
     const $elem = $(resultHtml)
-    const data = $elem.attr('data-embed-value')
-    return data
+    return $elem.text()
 }
 
 /**
@@ -40,7 +35,7 @@ function getDataByResultHtml(resultHtml: string): any {
  * @returns embed instance
  */
 function createEmbedInstance(data: any): IEmbed {
-    return new FormulaEmbed(data)
+    return new CodeEmbed(data)
 }
 
 /**

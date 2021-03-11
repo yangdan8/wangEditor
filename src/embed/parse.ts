@@ -43,7 +43,7 @@ export function renderHtml2ResultHtml(renderHtml: string, editor: Editor): strin
                 const embedId = getAttrValue(attrs, 'id')
                 const embedInstance = editor.embed.getEmbedInstance(embedId)
                 if (embedInstance == null) return
-                const resultHtml = embedInstance.getResultHtml()
+                const resultHtml = embedInstance.genResultHtml()
                 resultHtmlArr.push(resultHtml)
                 return
             }
@@ -112,9 +112,11 @@ export function resultHtml2RenderHtml(resultHtml: string, editor: Editor): strin
     htmlParser.parse(resultHtml, {
         startElement(tag: string, attrs: IAttr[]) {
             // 命中 embed
-            embedConf = getEmbedConf(tag, attrs, editor)
-            if (embedConf != null) {
+            const conf = getEmbedConf(tag, attrs, editor)
+            if (conf != null) {
                 inEmbedFlag = 1 // 开始进入 embed 内部
+                // 重新记录 embed 相关数据
+                embedConf = conf
                 embedHtmlArr = []
                 embedHtmlArr.push(genStartHtml(tag, attrs))
                 return
@@ -154,6 +156,8 @@ export function resultHtml2RenderHtml(resultHtml: string, editor: Editor): strin
 
             // embed 的结尾
             if (inEmbedFlag === 1) {
+                inEmbedFlag = 0 // 接下来回归非 embed 状态
+
                 // 拼接完 embedHtml
                 embedHtmlArr.push(genEndHtml(tag))
                 const embedHtml = embedHtmlArr.join('')
@@ -168,8 +172,6 @@ export function resultHtml2RenderHtml(resultHtml: string, editor: Editor): strin
                 // 拼接 embed renderHtml
                 const containerHtml = genEmbedContainerHtml(embed)
                 renderHtmlArr.push(containerHtml)
-
-                inEmbedFlag = 0 // 接下来回归非 embed 状态
                 return
             }
 
