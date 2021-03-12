@@ -8,6 +8,7 @@ import $ from '../../utils/dom-core'
 import Editor from '../../editor/index'
 import { MenuActive } from '../menu-constructors/Menu'
 import createEmbedConf from './embed-conf/index'
+import { DEFAULT_LANG } from './embed-conf/const'
 
 class Code2 extends BtnMenu implements MenuActive {
     constructor(editor: Editor) {
@@ -26,7 +27,10 @@ class Code2 extends BtnMenu implements MenuActive {
      * 点击事件
      */
     public clickHandler(): void {
-        this.editor.cmd.insertEmbed('code', '')
+        this.editor.cmd.insertEmbed('code', {
+            code: '',
+            lang: DEFAULT_LANG,
+        })
     }
 
     /**

@@ -16,8 +16,9 @@ class EmbedHandler {
     constructor(editor: Editor) {
         this.editor = editor
 
-        // 绑定事件
-        bindEvent()
+        // 绑定事件，待 editor 创建完再绑定
+        // 依赖于 editor 生命周期，暂时放在 setTimeout 中 ！！！！
+        setTimeout(() => bindEvent(editor))
     }
 
     /**

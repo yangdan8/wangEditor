@@ -14,32 +14,33 @@
         wangEditor demo
     </p>
     <div id="div1">
-        <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
-        <p><span data-embed-key="formula" data-embed-value="f(x)=\int_{-\infty}^\infty\widehat f\xi\,e^{2\pi i\xi x}\,d\xi"></span></p>
-        <p>hello world</p>
+        <p>wangEditor 富文本编辑器 - embed 卡片示例</p>
+        <p>插入一个公式，支持 LaTeX 语法<span data-embed-key="formula" data-embed-value="f(x)=\int_{-\infty}^\infty\widehat f\xi\,e^{2\pi i\xi x}\,d\xi"></span></p>
+        <p>插入一段代码，使用 CodeMirror 代码编辑器</p>
         <pre><code class="javascript">function foo(items) {
-            var x = "All this is syntax highlighted";
-            return x;
-        }</code></pre>
-        <p>hello world 123</p>
+    var x = "All this is syntax highlighted";
+    return x;
+}
+        </code></pre>
+        <p>embed 卡片还可以支持：</p>
+        <ul>
+            <li>图片</li>
+            <li>视频</li>
+            <li>表格</li>
+            <li>附件链接</li>
+            <li>各种可嵌入的文档和服务，如思维导图、ppt、地图等</li>
+        </ul>
     </div>
     <div style="margin-top: 20px;">
         <button id="btn-set-html">设置 html</button>
     </div>
-
-    <ul>
-        <li>txt.html()</li>
-        <li>txt.text()</li>
-        <li>txt.getJSON() txt.setJSON()</li>
-        <li>粘贴</li>
-    </ul>
 
     <script src="../dist/wangEditor.js"></script>
     <script>
         // 改为使用var声明，才能在window对象上获取到编辑器实例，方便e2e测试
         var E = window.wangEditor
         var editor = new E('#div1')
-        editor.config.height = 500
+        editor.config.height = 700
 
         editor.config.onchange = function (newHtml) {
             console.log('onchange', newHtml)
