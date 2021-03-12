@@ -15,7 +15,7 @@ import createEmbedConf from './embed-conf/index'
 class Formula extends PanelMenu implements MenuActive {
     constructor(editor: Editor) {
         const $elem = $(
-            '<div class="w-e-menu" data-title="公式"><i class="w-e-icon-link"></i></div>'
+            '<div class="w-e-menu" data-title="公式"><i class="w-e-icon-sigma"></i></div>'
         )
         super($elem, editor)
 

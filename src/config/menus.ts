@@ -58,10 +58,10 @@ export default {
         'table',
         // 'code',
         'splitLine',
-        'undo',
-        'redo',
         'formula',
         'code2',
+        'undo',
+        'redo',
     ],
 
     fontNames: [
