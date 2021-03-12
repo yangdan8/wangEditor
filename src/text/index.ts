@@ -10,7 +10,8 @@ import { UA, throttle } from '../utils/util'
 import getChildrenJSON, { NodeListType } from './getChildrenJSON'
 import getHtmlByNodeList from './getHtmlByNodeList'
 import { EMPTY_P, EMPTY_P_LAST_REGEX, EMPTY_P_REGEX } from '../utils/const'
-import { renderHtml2ResultHtml, resultHtml2RenderHtml } from '../embed/parse'
+import { renderHtml2ResultHtml } from '../embed/parse'
+import renderEmbed from '../embed/render'
 
 /** 按键函数 */
 type KeyBoardHandler = (event: KeyboardEvent) => unknown
@@ -192,10 +193,10 @@ class Text {
         }
         val = val.replace(/\s+</g, '<')
 
-        // 处理 embed
-        val = resultHtml2RenderHtml(val, editor)
-
         $textElem.html(val)
+
+        // render embed
+        renderEmbed(editor)
 
         // 初始化选区，将光标定位到内容尾部
         editor.initSelection()

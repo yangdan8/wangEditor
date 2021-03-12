@@ -6,6 +6,7 @@
 import Editor from '../editor/index'
 import { IEmbedConf, IEmbed } from './IEmbed'
 import { bindEvent } from './container'
+import { DomElement } from '../utils/dom-core'
 
 class EmbedHandler {
     private editor: Editor
@@ -55,11 +56,26 @@ class EmbedHandler {
      * 获取 embed conf
      * @param key embed conf key
      */
-    public getEmbedConf(key: string): IEmbedConf | null {
+    public getEmbedConfByKey(key: string): IEmbedConf | null {
         const embedConfList = this.embedConfList
         if (embedConfList.length === 0) return null
 
         const filterArr = embedConfList.filter(conf => conf.key === key)
+        if (filterArr.length === 0) return null
+        return filterArr[0]
+    }
+
+    /**
+     * 根据 elem 获取 embed conf
+     * @param $elem elem
+     */
+    public getEmbedConfByElem($elem: DomElement): IEmbedConf | null {
+        const embedConfList = this.embedConfList
+        if (embedConfList.length === 0) return null
+
+        const filterArr = embedConfList.filter(conf => {
+            return conf.isEmbedElem($elem) // 是否是 embed elem ？
+        })
         if (filterArr.length === 0) return null
         return filterArr[0]
     }
@@ -70,7 +86,7 @@ class EmbedHandler {
      * @param data embed data
      */
     public createEmbedInstance(key: string, data: any): IEmbed | null {
-        const conf = this.getEmbedConf(key)
+        const conf = this.getEmbedConfByKey(key)
         if (conf == null) return null
 
         const instance = conf.createEmbedInstance(data)

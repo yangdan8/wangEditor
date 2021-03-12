@@ -25,15 +25,14 @@ class FormulaEmbed implements IEmbed {
         return $(`#${this.id}`)
     }
     /**
-     * 生成 render html 以渲染到编辑区域
-     * @returns html 代码
+     * 渲染公式
+     * @param $container embed 容器
      */
-    public genRenderedElem(): DomElement {
+    public render($container: DomElement): void {
         const data = this.data as string
-        const html = katex.renderToString(data, {
+        katex.render(data, $container.getNode(0) as HTMLElement, {
             throwOnError: false,
         })
-        return $(html)
     }
     /**
      * 获取 result html ，执行 txt.html() 时触发

@@ -3,7 +3,6 @@
  * @author wangfupeng
  */
 
-import { IAttr } from '../lib/simplehtmlparser'
 import { DomElement } from '../utils/dom-core'
 
 export interface IEmbed {
@@ -12,7 +11,7 @@ export interface IEmbed {
     isBlock: boolean
     data: any
     readonly $container: DomElement // getter
-    genRenderedElem(): DomElement
+    render($container: DomElement): void
     genResultHtml(): string
     onClick(event: MouseEvent): void
     onMouseEnter(event: MouseEvent): void
@@ -21,8 +20,8 @@ export interface IEmbed {
 
 export interface IEmbedConf {
     key: string
-    isEmbedResultHtml(tag: string, attrs: IAttr[]): boolean
-    getDataByResultHtml(resultHtml: string): any
+    isEmbedElem($elem: DomElement): boolean
+    getDataFromElem($elem: DomElement): any
     createEmbedInstance(data: any): IEmbed
 }
 

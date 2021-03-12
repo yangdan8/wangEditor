@@ -565,6 +565,14 @@ export class DomElement<T extends DomElementSelector = DomElementSelector> {
     }
 
     /**
+     * 获取当前元素 nodeType
+     */
+    getNodeType(): number {
+        const elem = this.elems[0]
+        return elem.nodeType
+    }
+
+    /**
      * 根据元素位置获取元素节点（默认获取0位置的节点）
      * @param n 元素节点位置
      */
@@ -865,6 +873,28 @@ export class DomElement<T extends DomElementSelector = DomElementSelector> {
 // new 一个对象
 function $(...arg: ConstructorParameters<typeof DomElement>): DomElement {
     return new DomElement(...arg)
+}
+
+type CallbackType = ($elem: DomElement) => void
+
+/**
+ * 遍历 elem 所有下级元素
+ * @param $elem elem
+ * @param callback 回调函数
+ */
+export function traversal($elem: DomElement, callback: CallbackType) {
+    if ($elem.getNodeType() === 1) {
+        callback($elem)
+    }
+    const $children = $elem.children()
+    if (!$children || $children.length === 0) return
+
+    $children.forEach((child: Element) => {
+        const $child = $(child)
+        if ($child.getNodeType() === 1) {
+            traversal($child, callback)
+        }
+    })
 }
 
 export default $

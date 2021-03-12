@@ -7,7 +7,7 @@ import Editor from '../index'
 import $, { DomElement } from '../../utils/dom-core'
 import { getRandom } from '../../utils/util'
 import { EMPTY_P } from '../../utils/const'
-import { resultHtml2RenderHtml } from '../../embed/parse'
+import renderEmbed from '../../embed/render'
 
 const styleSettings = {
     border: '1px solid #c9d8db',
@@ -108,11 +108,6 @@ export default function (editor: Editor): void {
  * @param editor editor
  */
 export function parseContent(editor: Editor): void {
-    const $textElem = editor.$textElem
-    let html = $textElem.html()
-
-    // 处理 embed
-    html = resultHtml2RenderHtml(html, editor)
-
-    $textElem.html(html)
+    // embed render
+    renderEmbed(editor)
 }

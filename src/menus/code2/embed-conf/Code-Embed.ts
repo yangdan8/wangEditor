@@ -26,25 +26,15 @@ class CodeEmbed implements IEmbed {
         return $(`#${this.id}`)
     }
     /**
-     * 生成 render html 以渲染到编辑区域
-     * @returns html 代码
+     * 渲染代码块
+     * @param $container embed 容器
      */
-    public genRenderedElem(): DomElement {
-        // 创建一个隐藏的 container ，加入到 body
-        const $fakeContainer = $('<div id="fake-container"></div>')
-        $fakeContainer.css('display', 'none')
-        $('body').append($fakeContainer)
-        setTimeout(() => {
-            // 用完了要删除
-            $fakeContainer.remove()
-        })
-
+    public render($container: DomElement): void {
         // 创建 elem ，加入隐藏的 container
         const $elem = $('<div></div>')
         const id = getRandom('ace-editor-')
         $elem.attr('id', id)
-        $elem.css('height', '300px') // 高度写写死
-        $fakeContainer.append($elem)
+        $container.append($elem)
 
         // 创建 AceEditor 实例，并记录
         const data = this.data as string
@@ -56,9 +46,6 @@ class CodeEmbed implements IEmbed {
         })
         this.codeEditorInstance = codeEditorInstance
         // AceEditor 的 API 继续参考 https://ace.c9.io/#nav=howto
-
-        // 返回 elem
-        return $elem
     }
     /**
      * 获取 result html ，执行 txt.html() 时触发

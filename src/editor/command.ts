@@ -136,12 +136,20 @@ class Command {
         return document.queryCommandSupported(name)
     }
 
+    /**
+     * 插入 embed 卡片
+     * @param key embed key
+     * @param data embed data
+     * @returns void
+     */
     public insertEmbed(key: string, data: any): void {
-        const embed = this.editor.embed.createEmbedInstance(key, data)
+        const editor = this.editor
+        const embed = editor.embed.createEmbedInstance(key, data)
         if (embed == null) return
 
-        const $elem = genEmbedContainerElem(embed)
-        this.insertElem($elem)
+        const $container = genEmbedContainerElem(embed)
+        this.insertElem($container)
+        embed.render($container)
     }
 }
 

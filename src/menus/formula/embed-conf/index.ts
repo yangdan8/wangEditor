@@ -5,33 +5,32 @@
 
 import { IEmbedConf, IEmbed } from '../../../embed/IEmbed'
 import { EMBED_KEY } from './const'
-import { IAttr } from '../../../lib/simplehtmlparser'
-import $ from '../../../utils/dom-core'
+import { DomElement } from '../../../utils/dom-core'
 import FormulaEmbed from './Formula-Embed'
 
 /**
- * 判断 elem 是否符合 formula 的 result html
- * @param tag html tag
- * @param attrs elem attrs
+ * 判断 elem 是否符合 formula
+ * @param $elem elem
  */
-function isEmbedResultHtml(tag: string, attrs: IAttr[]): boolean {
+function isEmbedElem($elem: DomElement): boolean {
     // 判断 elem 是否符合 'span[data-embed-key="formula"]'
-    if (tag === 'span') {
-        return attrs.some(attr => {
-            return attr.name === 'data-embed-key' && attr.value === EMBED_KEY
-        })
+    const nodeName = $elem.getNodeName().toLowerCase()
+    if (nodeName === 'span') {
+        if ($elem.attr('data-embed-key') === EMBED_KEY) {
+            return true
+        }
     }
+
     return false
 }
 
 /**
- * 根据 resultHtml 获取 data 。要和 genResultHtml() 对应好
- * @param resultHtml resultHtml
+ * 根据 $elem 获取 embed data
+ * @param $elem elem
  */
-function getDataByResultHtml(resultHtml: string): any {
-    const $elem = $(resultHtml)
+function getDataFromElem($elem: DomElement): any {
     const data = $elem.attr('data-embed-value')
-    return data
+    return data || ''
 }
 
 /**
@@ -50,8 +49,8 @@ function createEmbedInstance(data: any): IEmbed {
 function createEmbedConf(): IEmbedConf {
     return {
         key: EMBED_KEY,
-        isEmbedResultHtml,
-        getDataByResultHtml,
+        isEmbedElem,
+        getDataFromElem,
         createEmbedInstance,
     }
 }
