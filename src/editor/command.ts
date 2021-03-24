@@ -145,10 +145,20 @@ class Command {
     public insertEmbed(key: string, data: any): void {
         const editor = this.editor
         const embed = editor.embed.createEmbedInstance(key, data)
+        const $top = editor.selection.getSelectionRangeTopNodes()[0]
         if (embed == null) return
 
-        const $container = genEmbedContainerElem(embed)
-        this.insertElem($container)
+        const $container = genEmbedContainerElem(embed, editor)
+        const $p = $(`<p><br></p>`)
+        $container.insertAfter($top)
+        if ($container.next().length === 0) {
+            // 自动添加下一行
+            $p.insertAfter($container)
+            // 暂时把把光标定位到下个空行中
+            // TODO: 目标是光标应该定位到embed里面
+            editor.selection.moveCursor($p.getNode())
+
+        }
         embed.render($container)
     }
 }

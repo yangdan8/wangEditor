@@ -21,7 +21,7 @@ function renderEmbed(editor: Editor): void {
         if (embedInstance == null) return
 
         // 生成 $container ，添加到当前元素后面
-        const $container = genEmbedContainerElem(embedInstance)
+        const $container = genEmbedContainerElem(embedInstance, editor)
         $container.insertAfter($elem)
 
         // 调用 embed.render

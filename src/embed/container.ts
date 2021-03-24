@@ -42,7 +42,7 @@ function genBlockContainerTooltip(embedInstance: IEmbed): DomElement | null {
  * @param embedInstance embed 实例
  * @returns elem
  */
-export function genEmbedContainerElem(embedInstance: IEmbed): DomElement {
+export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): DomElement {
     const id = embedInstance.id
     const isBlock = embedInstance.isBlock
 
@@ -67,8 +67,7 @@ export function genEmbedContainerElem(embedInstance: IEmbed): DomElement {
 
     // 追加“回车”按钮
     if (isBlock) {
-        const $enterBtn = genEnterButton(embedInstance)
-        $container.append($enterBtn)
+
     }
 
     return $container
