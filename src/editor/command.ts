@@ -149,16 +149,23 @@ class Command {
         if (embed == null) return
 
         const $container = genEmbedContainerElem(embed, editor)
-        const $p = $(`<p><br></p>`)
-        $container.insertAfter($top)
-        if ($container.next().length === 0) {
-            // 自动添加下一行
-            $p.insertAfter($container)
-            // 暂时把把光标定位到下个空行中
-            // TODO: 目标是光标应该定位到embed里面
-            editor.selection.moveCursor($p.getNode())
+        if ($container.hasClass('we-embed-card-inline')) {
+            this.insertElem($container)
+        } else {
+            const $p = $(`<p><br></p>`)
+            $container.insertAfter($top)
+            if ($container.next().length === 0) {
+                // 自动添加下一行
+                $p.insertAfter($container)
+                // 暂时把把光标定位到下个空行中
+                // TODO: 目标是光标应该定位到embed里面
+                editor.selection.moveCursor($p.getNode())
 
+            }
         }
+
+
+
         embed.render($container)
     }
 }
