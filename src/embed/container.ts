@@ -7,6 +7,7 @@ import $, { DomElement } from '../utils/dom-core'
 import { IEmbed } from './IEmbed'
 import Editor from '../editor/index'
 
+let targetEmbed: Element
 /**
  * 生成卡片右下角的 enter 按钮
  * @param embedInstance embed 实例
@@ -30,8 +31,9 @@ function genBlockContainerTooltip(embedInstance: IEmbed): DomElement | null {
     const $tooltipContainer = $('<div class="we-embed-card-block-tooltip"></div>')
 
     // “删除”按钮
-    const $deleteBtn = $(`<button data-name="delete" data-embed-id="${id}"
-        class="we-embed-card-block-del">删除卡片</button>`)
+    const $deleteBtn = $(`<div data-name="delete" data-embed-id="${id}"
+        class="we-embed-card-block-del">删除卡片</div>`)
+    // const $deleteBtn = $(`<div class="" data-embed-id="${id}"></div>`)
     $tooltipContainer.append($deleteBtn)
 
     return $tooltipContainer
@@ -93,6 +95,19 @@ function createNewP($container: DomElement, editor: Editor) {
  */
 export function bindEvent(editor: Editor): void {
     editor.$textContainerElem.on('click', (event: MouseEvent) => {
+        let target: Element | null = event.target as Element
+        let hasEmbed = false
+        while (target) {
+            hasEmbed = $(target).hasClass('we-embed-card-block')
+            if (hasEmbed) {
+                targetEmbed = target
+                break
+            }
+            target = target.parentNode ? target.parentNode as Element : null
+        }
+        if (targetEmbed) {
+            hasEmbed ? $(targetEmbed.childNodes[0]).css('display', 'block') : $(targetEmbed.childNodes[0]).css('display', 'none')
+        }
         const $target = $(event.target)
         const embedId = $target.attr('data-embed-id') || ''
         const embedInstance = editor.embed.getEmbedInstance(embedId)

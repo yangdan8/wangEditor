@@ -258,7 +258,7 @@ export class DomElement<T extends DomElementSelector = DomElementSelector> {
             const agentFn: listener = function (e) {
                 const target = e.target as HTMLElement
                 if (target.matches(selector as string)) {
-                    ;(fn as listener).call(target, e)
+                    ; (fn as listener).call(target, e)
                 }
             }
             elem.addEventListener(type, agentFn)
