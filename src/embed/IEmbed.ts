@@ -10,6 +10,7 @@ export interface IEmbed {
     embedKey: string
     isBlock: boolean
     data: any
+    $content?: DomElement
     readonly $container: DomElement // getter
     render($container: DomElement): void
     genResultHtml(): string

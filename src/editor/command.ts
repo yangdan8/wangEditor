@@ -160,7 +160,18 @@ class Command {
                 // 暂时把把光标定位到下个空行中
                 // TODO: 目标是光标应该定位到embed里面
                 editor.selection.moveCursor($p.getNode())
-
+                editor.txt.eventHooks.deleteDownEvents.push((e) => {
+                    const selection = editor.selection.getSelectionContainerElem()
+                    if (selection?.equal($p)) {
+                        const pos = editor.selection.getCursorPos()
+                        if ((selection.text() === "" && pos === 1) || !pos) {
+                            e.preventDefault()
+                            const child = $container.children()
+                            editor.selection.moveCursor(child?.get(2).getNode() as Node)
+                            editor.selection.saveRange()
+                        }
+                    }
+                })
             }
         }
 

@@ -18,6 +18,7 @@ class CodeEmbed implements IEmbed {
     public embedKey: string = EMBED_KEY
     public isBlock: boolean = true // display: block
     public data: IData
+    public $content: DomElement = $('')
     private codeEditorInstance: any = null
 
     constructor(data: IData) {
@@ -41,27 +42,36 @@ class CodeEmbed implements IEmbed {
             <option>java</option>
             <option>python</option>
         </select>`)
+        const $content = this.$content
         $langSelect.on('change', () => {
             codeEditorInstance.setOption('mode', $langSelect.val())
         })
         $langSelectContainer.append($langSelect)
-        $container.append($langSelectContainer)
+        $content.append($langSelectContainer)
+        // $container.append($langSelectContainer)
 
         // 创建 elem ，加入隐藏的 container
         const $elem = $('<div></div>')
         const id = getRandom('ace-editor-')
         $elem.attr('id', id)
         $elem.css('border-top', '1px solid #ccc')
-        $container.append($elem)
+        $content.append($elem)
+        // $container.append($elem)
 
         // 创建 AceEditor 实例，并记录
         const { code, lang } = this.data
-        const codeEditorInstance = codeMirror(document.getElementById(id) as HTMLElement, {
+        const codeEditorInstance = codeMirror(this.$content.getNode(0) as HTMLElement, {
             lineNumbers: true,
             tabSize: 4,
             value: code,
             mode: lang,
         })
+        // const codeEditorInstance = codeMirror(document.getElementById(id) as HTMLElement, {
+        //     lineNumbers: true,
+        //     tabSize: 4,
+        //     value: code,
+        //     mode: lang,
+        // })
         this.codeEditorInstance = codeEditorInstance
         // AceEditor 的 API 继续参考 https://ace.c9.io/#nav=howto
     }

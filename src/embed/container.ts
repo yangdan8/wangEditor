@@ -58,13 +58,33 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
     }
 
     // 生成 $container 。注意 id 必须这样写，否则找不到 embedInstance.$container
-    const containerHtml = `<${tag} id="${id}" data-we-embed-card class="${className}" contenteditable="false"></${tag}>`
+    const containerHtml = `<${tag} id="${id}" data-we-embed-card class="${className}"></${tag}>`
+    const $content = $(`<${tag} class="we-embed-card-content" contenteditable="false"></${tag}>`)
+    const $left = $(`<span class="we-embed-card-left">&#8203</span>`)
+    const $right = $(`<span class="we-embed-card-right">&#8203</span>`)
     const $container = $(containerHtml)
+    $container.append($left)
+    $container.append($content)
+    $container.append($right)
+    embedInstance.$content = $content
+
 
     // 追加 tooltip
     if (isBlock) {
         const $tooltip = genBlockContainerTooltip(embedInstance)
         if ($tooltip != null) $container.append($tooltip)
+
+
+        editor.txt.eventHooks.keydownEvents.push((e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault()
+            }
+            const $selection = editor.selection.getSelectionContainerElem()
+            if ($selection?.hasClass('we-embed-card-right')) {
+                editor.selection.moveCursor($container.next().getNode())
+                editor.selection.saveRange()
+            }
+        })
     }
 
     // 追加“回车”按钮
@@ -106,7 +126,9 @@ export function bindEvent(editor: Editor): void {
             target = target.parentNode ? target.parentNode as Element : null
         }
         if (targetEmbed) {
-            hasEmbed ? $(targetEmbed.childNodes[0]).css('display', 'block') : $(targetEmbed.childNodes[0]).css('display', 'none')
+            const len = targetEmbed.childNodes.length
+            const tooltip = targetEmbed.childNodes[len - 1]
+            hasEmbed ? $(tooltip).css('display', 'block') : $(tooltip).css('display', 'none')
         }
         const $target = $(event.target)
         const embedId = $target.attr('data-embed-id') || ''

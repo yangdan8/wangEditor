@@ -16,6 +16,7 @@ class FormulaEmbed implements IEmbed {
     public embedKey: string = EMBED_KEY
     public isBlock: boolean = false // display: inline-block
     public data: string = ''
+    public $content: DomElement = $('')
 
     constructor(data: string) {
         this.id = getRandom(`${EMBED_KEY}-`) // id 会对应到 embed 容器的 DOM 节点
@@ -30,9 +31,12 @@ class FormulaEmbed implements IEmbed {
      */
     public render($container: DomElement): void {
         const data = this.data as string
-        katex.render(data, $container.getNode(0) as HTMLElement, {
+        katex.render(data, this.$content.getNode(0) as HTMLElement, {
             throwOnError: false,
         })
+        // katex.render(data, $container.getNode(0) as HTMLElement, {
+        //     throwOnError: false,
+        // })
     }
     /**
      * 获取 result html ，执行 txt.html() 时触发
