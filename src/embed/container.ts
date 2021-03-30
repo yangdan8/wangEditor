@@ -28,7 +28,7 @@ function genBlockContainerTooltip(embedInstance: IEmbed): DomElement | null {
     if (embedInstance.isBlock === false) return null
     const id = embedInstance.id
 
-    const $tooltipContainer = $('<div class="we-embed-card-block-tooltip"></div>')
+    const $tooltipContainer = $('<div class="we-embed-card-block-tooltip" contenteditable="false"></div>')
 
     // “删除”按钮
     const $deleteBtn = $(`<div data-name="delete" data-embed-id="${id}"
@@ -76,13 +76,37 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
 
 
         editor.txt.eventHooks.keydownEvents.push((e) => {
-            if (e.keyCode === 13) {
+            if (e.key === "Enter") {
                 e.preventDefault()
             }
+
             const $selection = editor.selection.getSelectionContainerElem()
             if ($selection?.hasClass('we-embed-card-right')) {
-                editor.selection.moveCursor($container.next().getNode())
-                editor.selection.saveRange()
+                // 重写删除事件
+                if (e.key === "Backspace") {
+                    $container.remove()
+                } else if (e.key === "ArrowLeft") {
+                    editor.selection.moveCursor($left.getNode())
+                    editor.selection.saveRange()
+                } else {
+                    editor.selection.moveCursor($container.next().getNode())
+                    editor.selection.saveRange()
+                }
+            }
+
+            if ($selection?.hasClass('we-embed-card-left')) {
+                if (e.key === "ArrowUp") {
+                    e.preventDefault()
+                }
+
+                if (e.key === "ArrowRight") {
+                    e.preventDefault()
+                    editor.selection.moveCursor($right.getNode())
+                    editor.selection.saveRange()
+                } else {
+                    editor.selection.moveCursor($container.prev().getNode())
+                    editor.selection.saveRange()
+                }
             }
         })
     }
