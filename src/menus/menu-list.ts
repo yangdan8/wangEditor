@@ -29,6 +29,7 @@ import SplitLine from './split-line/index'
 import Todo from './todo'
 import Formula from './formula/index'
 import Code2 from './code2/index'
+import Video2 from './video2/index'
 
 export type MenuListType = {
     [key: string]: any
@@ -61,4 +62,5 @@ export default {
     todo: Todo,
     formula: Formula,
     code2: Code2,
+    video2: Video2
 }

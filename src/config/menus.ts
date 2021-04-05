@@ -62,6 +62,7 @@ export default {
         'code2',
         'undo',
         'redo',
+        'video2'
     ],
 
     fontNames: [
