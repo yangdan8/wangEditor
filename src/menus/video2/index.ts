@@ -30,7 +30,7 @@ class video2 extends PanelMenu implements MenuActive {
     }
 
     private createPanel() {
-        const conf = createPanelConf()
+        const conf = createPanelConf(this.editor)
         const panel = new Panel(this, conf)
         panel.create()
     }

@@ -10,8 +10,9 @@ export default class VideoEmbed extends IEmbedConstruct implements IEmbed {
     $content = $('')
     private videoInstance: any = null
 
-    constructor() {
+    constructor(data: string) {
         super(EMBED_KEY)
+        this.data = data
     }
 
     public get $container(): DomElement {
@@ -19,7 +20,7 @@ export default class VideoEmbed extends IEmbedConstruct implements IEmbed {
     }
 
     public render(): void {
-        const video = $(`<video src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" controls="controls" style="max-width:100%"></video>`)
+        const video = $(`<video src="${this.data}" controls="controls" style="max-width:100%"></video>`)
         this.$content.append(video)
         const videoInstance = video
         this.videoInstance = videoInstance

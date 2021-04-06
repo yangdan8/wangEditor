@@ -21,8 +21,8 @@ function isEmbedElem($video: DomElement): boolean {
  * 创建 embed 实例 
  * @returns embed instance
  */
-function createEmbedInstance(): IEmbed {
-    return new videoEmbed()
+function createEmbedInstance(data: any): IEmbed {
+    return new videoEmbed(data)
 }
 
 function getDataFromElem() {

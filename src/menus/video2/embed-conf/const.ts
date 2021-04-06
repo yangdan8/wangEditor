@@ -1,1 +1,1 @@
-export const EMBED_KEY = 'video'
+export const EMBED_KEY = 'video2'
