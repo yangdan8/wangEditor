@@ -109,6 +109,55 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
                 }
             }
         })
+    } else {
+        editor.txt.eventHooks.keydownEvents.push((e) => {
+            const $selection = editor.selection.getSelectionContainerElem()
+            if ($selection?.hasClass('we-embed-card-right')) {
+                e.preventDefault()
+
+                if (e.key === "ArrowLeft") {
+                    editor.selection.moveCursor($left.getNode())
+                    editor.selection.saveRange()
+                    return
+                }
+
+                //这里一定要加零宽空格，否则光标无法正确移动
+                let value = /^[A-Z]$/.test(e.key) ? e.key.toLowerCase() : "&#8203"
+                let $span = $(`<span>${value}</span>`)
+                if (!$container.next().length) {
+                    $span.insertAfter($container)
+                } else {
+                    $span = $container.next()
+                }
+                editor.selection.moveCursor($span.getNode())
+                editor.selection.saveRange()
+            }
+
+            if ($selection?.hasClass('we-embed-card-left')) {
+                e.preventDefault()
+
+                if (e.key === "ArrowRight") {
+                    editor.selection.moveCursor($right.getNode())
+                    editor.selection.saveRange()
+                    return
+                }
+
+                let value = /^[A-Z]$/.test(e.key) ? e.key.toLowerCase() : "&#8203"
+                let $span = $(`<span>${value}</span>`)
+                console.log($container.prev())
+                if (!$container.prev().length) {
+                    console.log("2")
+                    $span.insertBefore($container)
+                } else {
+                    $span = $container.prev()
+                }
+
+                editor.selection.moveCursor($span.getNode())
+                editor.selection.saveRange()
+            }
+
+
+        })
     }
 
     // 追加“回车”按钮

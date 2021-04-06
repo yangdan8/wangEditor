@@ -150,7 +150,14 @@ class Command {
 
         const $container = genEmbedContainerElem(embed, editor)
         if ($container.hasClass('we-embed-card-inline')) {
-            this.insertElem($container)
+            const $topElem = editor.selection.getSelectionRangeTopNodes()[0]
+            // TODO:去掉br
+            $topElem.append($container)
+            const child = $container.children()
+            editor.selection.moveCursor(child?.get(2).getNode() as Node)
+            editor.selection.saveRange()
+            // this.insertElem($container)
+
         } else {
             const $p = $(`<p><br></p>`)
             $container.insertAfter($top)
