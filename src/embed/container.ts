@@ -112,48 +112,68 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
     } else {
         editor.txt.eventHooks.keydownEvents.push((e) => {
             const $selection = editor.selection.getSelectionContainerElem()
+            const wordRex = /^[A-Za-z]$/
+            const allowKey = ["ArrowLeft", "ArrowRight", "Backspace"]
             if ($selection?.hasClass('we-embed-card-right')) {
-                e.preventDefault()
+                // 只修改左箭头和a-zA-Z的按键
+                if (wordRex.test(e.key) || allowKey.includes(e.key)) {
+                    e.preventDefault()
+                    if (e.key === "ArrowLeft" || e.key === "Backspace") {
+                        editor.selection.moveCursor($left.getNode())
+                        editor.selection.saveRange()
+                        return
+                    }
 
-                if (e.key === "ArrowLeft") {
-                    editor.selection.moveCursor($left.getNode())
+                    //这里一定要加零宽空格，否则光标无法正确移动
+                    let value = /^[A-Za-z]$/.test(e.key) ? e.key : ""
+
+                    if (editor.isComposing) {
+                        value = ""
+                    }
+
+                    let $span = $(`<span>&#8203${value}</span>`)
+                    let spanNode: Node
+
+                    if (!$container.next().length) {
+                        $span.insertAfter($container)
+                        spanNode = $span.childNodes()?.elems[0] || $span.getNode()
+                    } else {
+                        $span = $container.next()
+                        spanNode = $span.childNodes()?.elems[0] || $span.getNode()
+                        // TODO: 后续需要支持多标签内容，暂时多标签都会转为文字
+                        // TODO: 中文输入的情况需要坐下特殊处理
+                        spanNode.textContent = e.key + spanNode.textContent
+                    }
+
+                    console.log($span.childNodes()?.elems[0])
+
+                    console.log(spanNode)
+                    editor.selection.moveCursor(spanNode, 2)
                     editor.selection.saveRange()
-                    return
                 }
-
-                //这里一定要加零宽空格，否则光标无法正确移动
-                let value = /^[A-Z]$/.test(e.key) ? e.key.toLowerCase() : "&#8203"
-                let $span = $(`<span>${value}</span>`)
-                if (!$container.next().length) {
-                    $span.insertAfter($container)
-                } else {
-                    $span = $container.next()
-                }
-                editor.selection.moveCursor($span.getNode())
-                editor.selection.saveRange()
             }
 
             if ($selection?.hasClass('we-embed-card-left')) {
-                e.preventDefault()
+                if (wordRex.test(e.key) || allowKey.includes(e.key)) {
+                    e.preventDefault()
 
-                if (e.key === "ArrowRight") {
-                    editor.selection.moveCursor($right.getNode())
+                    if (e.key === "ArrowRight" || e.key === "Backspace") {
+                        editor.selection.moveCursor($right.getNode())
+                        editor.selection.saveRange()
+                        return
+                    }
+
+                    let value = wordRex.test(e.key) ? e.key : "&#8203"
+                    let $span = $(`<span>${value}</span>`)
+                    if (!$container.prev().length) {
+                        $span.insertBefore($container)
+                    } else {
+                        $span = $container.prev()
+                    }
+
+                    editor.selection.moveCursor($span.getNode())
                     editor.selection.saveRange()
-                    return
                 }
-
-                let value = /^[A-Z]$/.test(e.key) ? e.key.toLowerCase() : "&#8203"
-                let $span = $(`<span>${value}</span>`)
-                console.log($container.prev())
-                if (!$container.prev().length) {
-                    console.log("2")
-                    $span.insertBefore($container)
-                } else {
-                    $span = $container.prev()
-                }
-
-                editor.selection.moveCursor($span.getNode())
-                editor.selection.saveRange()
             }
 
 

@@ -151,7 +151,12 @@ class Command {
         const $container = genEmbedContainerElem(embed, editor)
         if ($container.hasClass('we-embed-card-inline')) {
             const $topElem = editor.selection.getSelectionRangeTopNodes()[0]
-            // TODO:去掉br
+            const $topElemChild = $topElem.childNodes()
+            // 删除多余的br
+            if ($topElemChild?.get(0).getNodeName() === "BR") {
+                $topElemChild.get(0).remove()
+            }
+            // if($topElemChild?.get(0))
             $topElem.append($container)
             const child = $container.children()
             editor.selection.moveCursor(child?.get(2).getNode() as Node)
