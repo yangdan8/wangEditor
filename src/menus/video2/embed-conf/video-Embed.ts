@@ -19,8 +19,11 @@ export default class VideoEmbed extends IEmbedConstruct implements IEmbed {
         return $(`#${this.id}`)
     }
 
+    /**
+     * embed的渲染函数，控制视频的插入
+     */
     public render(): void {
-        const video = $(`<video src="${this.data}" controls="controls" style="max-width:100%"></video>`)
+        const video = $(`${this.data}`)
         this.$content.append(video)
         const videoInstance = video
         this.videoInstance = videoInstance

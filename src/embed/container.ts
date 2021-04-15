@@ -76,9 +76,6 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
 
 
         editor.txt.eventHooks.keydownEvents.push((e) => {
-            if (e.key === "Enter") {
-                e.preventDefault()
-            }
 
             const $selection = editor.selection.getSelectionContainerElem()
             if ($selection?.hasClass('we-embed-card-right')) {
@@ -89,6 +86,7 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
                     editor.selection.moveCursor($left.getNode())
                     editor.selection.saveRange()
                 } else {
+                    e.preventDefault()
                     editor.selection.moveCursor($container.next().getNode())
                     editor.selection.saveRange()
                 }
