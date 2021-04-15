@@ -1,5 +1,5 @@
 import Editor from '../../editor/index'
-import { arrForEach, forEach } from '../../utils/util'
+import { arrForEach, forEach, getRandom } from '../../utils/util'
 import post from '../../editor/upload/upload-core'
 import Progress from '../../editor/upload/progress'
 
@@ -247,6 +247,10 @@ class UploadVideo {
             const video = `<video src="${url}"></video>`
             editor.cmd.insertEmbed('video2', video)
         } else {
+            // TODO: 自定义插入功能 待测试
+            const id = getRandom(url)
+            const tmp = `<div id="${id}"></div>`
+            editor.cmd.insertEmbed('video2', tmp)
             config.customInsertVideo(url)
             return
         }
