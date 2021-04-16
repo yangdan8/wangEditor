@@ -249,9 +249,9 @@ class UploadVideo {
         } else {
             // TODO: 自定义插入功能 待测试
             const id = getRandom(url)
-            const tmp = `<div id="${id}"></div>`
+            const tmp = `<div id="${id}" style="width: 100%;"></div>`
             editor.cmd.insertEmbed('video2', tmp)
-            config.customInsertVideo(url)
+            config.customInsertVideo(url, id)
             return
         }
 
