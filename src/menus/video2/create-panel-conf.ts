@@ -1,8 +1,8 @@
-import Editor from "../../editor";
+import Editor from '../../editor'
 import $ from '../../utils/dom-core'
-import { getRandom } from "../../utils/util";
-import { PanelConf, PanelTabConf } from "../menu-constructors/Panel";
-import UploadVideo from "./upload-video";
+import { getRandom } from '../../utils/util'
+import { PanelConf, PanelTabConf } from '../menu-constructors/Panel'
+import UploadVideo from './upload-video'
 
 export default function (editor: Editor) {
     const uploadVideo = new UploadVideo(editor)
@@ -23,9 +23,9 @@ export default function (editor: Editor) {
     }
 
     /**
-    * 校验在线视频链接
-    * @param video 在线视频链接
-    */
+     * 校验在线视频链接
+     * @param video 在线视频链接
+     */
     function checkOnlineVideo(video: string): boolean {
         // 查看开发者自定义配置的返回值
         const check = editor.config.onlineVideoCheck(video)
@@ -107,13 +107,13 @@ export default function (editor: Editor) {
                 {
                     selector: '#' + btnStartId,
                     type: 'click',
-                    fn: emitUploadFn
+                    fn: emitUploadFn,
                 },
                 // 选择视频完毕
                 {
                     selector: '#' + inputUploadId,
                     type: 'change',
-                    fn: insertVideoFn
+                    fn: insertVideoFn,
                 },
             ],
         },
@@ -139,18 +139,16 @@ export default function (editor: Editor) {
                 {
                     selector: '#' + btnOkId,
                     type: 'click',
-                    fn: insertVideoByInput
-                }
-            ]
-        }
+                    fn: insertVideoByInput,
+                },
+            ],
+        },
     ]
-
-
 
     const conf: PanelConf = {
         width: 300,
         height: 0,
-        tabs: []
+        tabs: [],
     }
 
     conf.tabs.push(tabsConf[0])

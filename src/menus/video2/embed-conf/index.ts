@@ -4,13 +4,12 @@ import { EMBED_KEY } from './const'
 import { DomElement } from '../../../utils/dom-core'
 
 /**
- * 判读 elem 是否符合 formula的 result html 
+ * 判读 elem 是否符合 formula的 result html
  * resultHtml -> <video src="xxxxx"></video>
  * @param $video video节点
- * @returns 
+ * @returns
  */
 function isEmbedElem($video: DomElement): boolean {
-
     const nodeName = $video.getNodeName().toLowerCase()
     if (nodeName !== 'video') return false
 
@@ -18,7 +17,7 @@ function isEmbedElem($video: DomElement): boolean {
 }
 
 /**
- * 创建 embed 实例 
+ * 创建 embed 实例
  * @returns embed instance
  */
 function createEmbedInstance(data: any): IEmbed {

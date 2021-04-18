@@ -12,12 +12,12 @@ let targetEmbed: Element
  * 生成卡片右下角的 enter 按钮
  * @param embedInstance embed 实例
  */
-function genEnterButton(embedInstance: IEmbed): DomElement {
-    const id = embedInstance.id
-    const $btn = $(`<button data-name="enter" data-embed-id="${id}"
-        class="we-embed-card-block-enter">回车换行</button>`)
-    return $btn
-}
+// function genEnterButton(embedInstance: IEmbed): DomElement {
+//     const id = embedInstance.id
+//     const $btn = $(`<button data-name="enter" data-embed-id="${id}"
+//         class="we-embed-card-block-enter">回车换行</button>`)
+//     return $btn
+// }
 
 /**
  * 生成 embed container tooltip
@@ -28,7 +28,9 @@ function genBlockContainerTooltip(embedInstance: IEmbed): DomElement | null {
     if (embedInstance.isBlock === false) return null
     const id = embedInstance.id
 
-    const $tooltipContainer = $('<div class="we-embed-card-block-tooltip" contenteditable="false"></div>')
+    const $tooltipContainer = $(
+        '<div class="we-embed-card-block-tooltip" contenteditable="false"></div>'
+    )
 
     // “删除”按钮
     const $deleteBtn = $(`<div data-name="delete" data-embed-id="${id}"
@@ -68,21 +70,18 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
     $container.append($right)
     embedInstance.$content = $content
 
-
     // 追加 tooltip
     if (isBlock) {
         const $tooltip = genBlockContainerTooltip(embedInstance)
         if ($tooltip != null) $container.append($tooltip)
 
-
-        editor.txt.eventHooks.keydownEvents.push((e) => {
-
+        editor.txt.eventHooks.keydownEvents.push(e => {
             const $selection = editor.selection.getSelectionContainerElem()
             if ($selection?.hasClass('we-embed-card-right')) {
                 // 重写删除事件
-                if (e.key === "Backspace") {
+                if (e.key === 'Backspace') {
                     $container.remove()
-                } else if (e.key === "ArrowLeft") {
+                } else if (e.key === 'ArrowLeft') {
                     editor.selection.moveCursor($left.getNode())
                     editor.selection.saveRange()
                 } else {
@@ -93,11 +92,11 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
             }
 
             if ($selection?.hasClass('we-embed-card-left')) {
-                if (e.key === "ArrowUp") {
+                if (e.key === 'ArrowUp') {
                     e.preventDefault()
                 }
 
-                if (e.key === "ArrowRight") {
+                if (e.key === 'ArrowRight') {
                     e.preventDefault()
                     editor.selection.moveCursor($right.getNode())
                     editor.selection.saveRange()
@@ -108,25 +107,25 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
             }
         })
     } else {
-        editor.txt.eventHooks.keydownEvents.push((e) => {
+        editor.txt.eventHooks.keydownEvents.push(e => {
             const $selection = editor.selection.getSelectionContainerElem()
             const wordRex = /^[A-Za-z]$/
-            const allowKey = ["ArrowLeft", "ArrowRight", "Backspace"]
+            const allowKey = ['ArrowLeft', 'ArrowRight', 'Backspace']
             if ($selection?.hasClass('we-embed-card-right')) {
                 // 只修改左箭头和a-zA-Z的按键
                 if (wordRex.test(e.key) || allowKey.includes(e.key)) {
                     e.preventDefault()
-                    if (e.key === "ArrowLeft" || e.key === "Backspace") {
+                    if (e.key === 'ArrowLeft' || e.key === 'Backspace') {
                         editor.selection.moveCursor($left.getNode())
                         editor.selection.saveRange()
                         return
                     }
 
                     //这里一定要加零宽空格，否则光标无法正确移动
-                    let value = /^[A-Za-z]$/.test(e.key) ? e.key : ""
+                    let value = /^[A-Za-z]$/.test(e.key) ? e.key : ''
 
                     if (editor.isComposing) {
-                        value = ""
+                        value = ''
                     }
 
                     let $span = $(`<span>&#8203${value}</span>`)
@@ -155,13 +154,13 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
                 if (wordRex.test(e.key) || allowKey.includes(e.key)) {
                     e.preventDefault()
 
-                    if (e.key === "ArrowRight" || e.key === "Backspace") {
+                    if (e.key === 'ArrowRight' || e.key === 'Backspace') {
                         editor.selection.moveCursor($right.getNode())
                         editor.selection.saveRange()
                         return
                     }
 
-                    let value = wordRex.test(e.key) ? e.key : "&#8203"
+                    let value = wordRex.test(e.key) ? e.key : '&#8203'
                     let $span = $(`<span>${value}</span>`)
                     if (!$container.prev().length) {
                         $span.insertBefore($container)
@@ -173,15 +172,13 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
                     editor.selection.saveRange()
                 }
             }
-
-
         })
     }
 
     // 追加“回车”按钮
-    if (isBlock) {
+    // if (isBlock) {
 
-    }
+    // }
 
     return $container
 }
@@ -214,7 +211,7 @@ export function bindEvent(editor: Editor): void {
                 targetEmbed = target
                 break
             }
-            target = target.parentNode ? target.parentNode as Element : null
+            target = target.parentNode ? (target.parentNode as Element) : null
         }
         if (targetEmbed) {
             const len = targetEmbed.childNodes.length

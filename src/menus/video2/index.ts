@@ -35,11 +35,10 @@ class video2 extends PanelMenu implements MenuActive {
         panel.create()
     }
 
-
     /**
      * 尝试修改菜单 active 状态
      */
-    public tryChangeActive() { }
+    public tryChangeActive() {}
 }
 
 export default video2

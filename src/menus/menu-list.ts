@@ -62,5 +62,5 @@ export default {
     todo: Todo,
     formula: Formula,
     code2: Code2,
-    video2: Video2
+    video2: Video2,
 }

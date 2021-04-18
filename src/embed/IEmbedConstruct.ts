@@ -1,4 +1,4 @@
-import { getRandom } from "../utils/util"
+import { getRandom } from '../utils/util'
 
 export class IEmbedConstruct {
     id: string

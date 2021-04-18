@@ -153,7 +153,7 @@ class Command {
             const $topElem = editor.selection.getSelectionRangeTopNodes()[0]
             const $topElemChild = $topElem.childNodes()
             // 删除多余的br
-            if ($topElemChild?.get(0).getNodeName() === "BR") {
+            if ($topElemChild?.get(0).getNodeName() === 'BR') {
                 $topElemChild.get(0).remove()
             }
             // if($topElemChild?.get(0))
@@ -162,7 +162,6 @@ class Command {
             editor.selection.moveCursor(child?.get(2).getNode() as Node)
             editor.selection.saveRange()
             // this.insertElem($container)
-
         } else {
             const $p = $(`<p><br></p>`)
             $container.insertAfter($top)
@@ -172,11 +171,11 @@ class Command {
                 // 暂时把把光标定位到下个空行中
                 // TODO: 目标是光标应该定位到embed里面
                 editor.selection.moveCursor($p.getNode())
-                editor.txt.eventHooks.deleteDownEvents.push((e) => {
+                editor.txt.eventHooks.deleteDownEvents.push(e => {
                     const selection = editor.selection.getSelectionContainerElem()
                     if (selection?.equal($p)) {
                         const pos = editor.selection.getCursorPos()
-                        if ((selection.text() === "" && pos === 1) || !pos) {
+                        if ((selection.text() === '' && pos === 1) || !pos) {
                             e.preventDefault()
                             const child = $container.children()
                             editor.selection.moveCursor(child?.get(2).getNode() as Node)
@@ -186,8 +185,6 @@ class Command {
                 })
             }
         }
-
-
 
         embed.render($container)
     }

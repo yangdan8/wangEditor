@@ -1,7 +1,7 @@
-import { IEmbed } from "../../../embed/IEmbed";
-import { EMBED_KEY } from "./const";
+import { IEmbed } from '../../../embed/IEmbed'
+import { EMBED_KEY } from './const'
 import $, { DomElement } from '../../../utils/dom-core'
-import { IEmbedConstruct } from "../../../embed/IEmbedConstruct";
+import { IEmbedConstruct } from '../../../embed/IEmbedConstruct'
 
 export default class VideoEmbed extends IEmbedConstruct implements IEmbed {
     embedKey = EMBED_KEY
@@ -29,7 +29,7 @@ export default class VideoEmbed extends IEmbedConstruct implements IEmbed {
         this.videoInstance = videoInstance
     }
     /**
-    * 获取 result html ，执行 txt.html() 时触发
+     * 获取 result html ，执行 txt.html() 时触发
      * @returns html 代码
      */
     public genResultHtml(): string {
