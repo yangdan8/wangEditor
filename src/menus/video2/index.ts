@@ -14,7 +14,7 @@ import PanelMenu from '../menu-constructors/PanelMenu'
 class video2 extends PanelMenu implements MenuActive {
     constructor(editor: Editor) {
         let $elem = $(
-            '<div class="w-e-menu" data-title="图片"><i class="w-e-icon-image"></i></div>'
+            '<div class="w-e-menu" data-title="video2"><i class="w-e-icon-play"></i></div>'
         )
         super($elem, editor)
         const conf = createEmbedConf()

@@ -6,7 +6,7 @@ import UploadVideo from './upload-video'
 
 export default function (editor: Editor) {
     const uploadVideo = new UploadVideo(editor)
-
+    const config = editor.config
     const inputId = getRandom('input')
     const btnOkId = getRandom('btnOkId')
     const btnStartId = getRandom('btn-local-ok')
@@ -126,7 +126,6 @@ export default function (editor: Editor) {
                             type="text"
                             class="block"
                             placeholder="${editor.i18next.t('如')}：<iframe src=... ></iframe>"/>
-                            >
                     </div>
                     <div class="w-e-button-container">
                         <button type="button" id="${btnOkId}">
@@ -151,8 +150,14 @@ export default function (editor: Editor) {
         tabs: [],
     }
 
-    conf.tabs.push(tabsConf[0])
-    conf.tabs.push(tabsConf[1])
+    // 显示“上传视频”
+    if (window.FileReader && (config.uploadVideoServer || config.customUploadVideo)) {
+        conf.tabs.push(tabsConf[0])
+    }
+    // 显示“插入视频”
+    if (config.showLinkVideo) {
+        conf.tabs.push(tabsConf[1])
+    }
 
     return conf
 }

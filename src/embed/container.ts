@@ -107,6 +107,7 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
             }
         })
     } else {
+        // inline
         editor.txt.eventHooks.keydownEvents.push(e => {
             const $selection = editor.selection.getSelectionContainerElem()
             const wordRex = /^[A-Za-z]$/
@@ -115,7 +116,10 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
                 // 只修改左箭头和a-zA-Z的按键
                 if (wordRex.test(e.key) || allowKey.includes(e.key)) {
                     e.preventDefault()
-                    if (e.key === 'ArrowLeft' || e.key === 'Backspace') {
+                    if (e.key === 'Backspace') {
+                        $container.remove()
+                        return
+                    } else if (e.key === 'ArrowLeft') {
                         editor.selection.moveCursor($left.getNode())
                         editor.selection.saveRange()
                         return

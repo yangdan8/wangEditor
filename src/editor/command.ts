@@ -152,8 +152,12 @@ class Command {
         if ($container.hasClass('we-embed-card-inline')) {
             const $topElem = editor.selection.getSelectionRangeTopNodes()[0]
             const $topElemChild = $topElem.childNodes()
+            console.log($topElemChild?.get(0))
             // 删除多余的br
-            if ($topElemChild?.get(0).getNodeName() === 'BR') {
+            if (
+                $topElemChild?.get(0).length !== 0 &&
+                $topElemChild?.get(0)?.getNodeName() === 'BR'
+            ) {
                 $topElemChild.get(0).remove()
             }
             // if($topElemChild?.get(0))

@@ -8,6 +8,7 @@ module.exports = {
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/unit/$1',
+        '^.+\\.(css|less)$': '<rootDir>/test/helpers/styleMock.js',
     },
     collectCoverageFrom: ['src/**/*.ts', 'src/**/*.js'],
     setupFilesAfterEnv: ['./test/setup/index.ts']
