@@ -27,14 +27,14 @@
         editor.config.uploadVideoServer = '/api/upload-video';
 
         // 自定义插入视频
-        editor.config.customInsertVideo = (url) => {
+        editor.config.customInsertVideo = (url, id) => {
             console.log('自定义插入视频---->', url);
             // 演示西瓜视频
-            editor.cmd.do('insertHTML', `<p>
-                                            <p contenteditable = false id="mse" style="max-width:100%"></p>
-                                         </p>`)
+            // editor.cmd.do('insertHTML', `<p>
+            //                                 <p contenteditable = false id="mse" style="max-width:100%"></p>
+            //                              </p>`)
             let player = new Player({
-                id: 'mse',
+                id: id,
                 url: url
             });
         }

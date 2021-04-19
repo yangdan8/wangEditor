@@ -116,12 +116,19 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
                 // 只修改左箭头和a-zA-Z的按键
                 if (wordRex.test(e.key) || allowKey.includes(e.key)) {
                     e.preventDefault()
-                    if (e.key === 'Backspace') {
-                        $container.remove()
-                        return
-                    } else if (e.key === 'ArrowLeft') {
+                    // if (e.key === 'Backspace') {
+                    //     $container.remove()
+                    //     return
+                    // } else
+
+                    if (e.key === 'ArrowLeft') {
                         editor.selection.moveCursor($left.getNode())
                         editor.selection.saveRange()
+                        return
+                    }
+
+                    if (e.key === 'Backspace') {
+                        $container.remove()
                         return
                     }
 
@@ -143,12 +150,10 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
                         spanNode = $span.childNodes()?.elems[0] || $span.getNode()
                         // TODO: 后续需要支持多标签内容，暂时多标签都会转为文字
                         // TODO: 中文输入的情况需要坐下特殊处理
-                        spanNode.textContent = e.key + spanNode.textContent
+
+                        spanNode.textContent = value + spanNode.textContent
                     }
 
-                    console.log($span.childNodes()?.elems[0])
-
-                    console.log(spanNode)
                     editor.selection.moveCursor(spanNode, 2)
                     editor.selection.saveRange()
                 }
