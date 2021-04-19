@@ -244,12 +244,12 @@ class UploadVideo {
 
         // 判断用户是否自定义插入视频
         if (!config.customInsertVideo) {
-            const video = `<video src="${url}"></video>`
+            const video = `<video src="${url}" controls="controls" style="max-width: 100%;"></video>`
             editor.cmd.insertEmbed('video2', video)
         } else {
             // TODO: 自定义插入功能 待测试
-            const id = getRandom(url)
-            const tmp = `<div id="${id}" style="width: 100%;"></div>`
+            const id = getRandom('video')
+            const tmp = `<div id="${id}" style="width: 100%;" data-url="${url}"></div>`
             editor.cmd.insertEmbed('video2', tmp)
             config.customInsertVideo(url, id)
             return

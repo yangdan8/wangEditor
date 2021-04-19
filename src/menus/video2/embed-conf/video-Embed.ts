@@ -28,13 +28,16 @@ export default class VideoEmbed extends IEmbedConstruct implements IEmbed {
         const videoInstance = video
         this.videoInstance = videoInstance
     }
+
     /**
      * 获取 result html ，执行 txt.html() 时触发
      * @returns html 代码
      */
     public genResultHtml(): string {
-        const videoInstance = this.videoInstance
-        return videoInstance // 语言，写死为 js
+        const $videoInstance = this.videoInstance
+        const url = $videoInstance.attr('data-url') || $videoInstance.attr('src')
+
+        return `<video src="${url}" controls="controls"></video>`
     }
 
     public onClick(event: MouseEvent): void {
