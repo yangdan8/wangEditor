@@ -27,17 +27,17 @@
         editor.config.uploadVideoServer = '/api/upload-video';
 
         // 自定义插入视频
-        // editor.config.customInsertVideo = (url) => {
-        //     console.log('自定义插入视频---->', url);
-        //     // 演示西瓜视频
-        //     editor.cmd.do('insertHTML', `<p>
-        //                                     <p contenteditable = false id="mse" style="max-width:100%"></p>
-        //                                  </p>`)
-        //     let player = new Player({
-        //         id: 'mse',
-        //         url: url
-        //     });
-        // }
+        editor.config.customInsertVideo = (url) => {
+            console.log('自定义插入视频---->', url);
+            // 演示西瓜视频
+            editor.cmd.do('insertHTML', `<p>
+                                            <p contenteditable = false id="mse" style="max-width:100%"></p>
+                                         </p>`)
+            let player = new Player({
+                id: 'mse',
+                url: url
+            });
+        }
 
         // // 自定义上传
         // editor.config.customUploadVideo = (files, insertVideoFn) => {
