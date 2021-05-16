@@ -16,6 +16,20 @@ import { EMPTY_FN } from '../../utils/const'
 function mutationsFilter(mutations: MutationRecord[], tar: Node) {
     // 剔除编辑区容器的 attribute 变化中的非 contenteditable 变化
     return mutations.filter(({ type, target, attributeName }) => {
+        const list = ['CodeMirror-cursors', 'we-embed-card-block-tooltip', 'cm-s-default']
+        if (type === 'attributes') {
+            const tarClassList = (target as Element).className.split(' ')
+            console.log(tarClassList)
+            console.log((target as Element).className)
+
+            list.some(v => {
+                if (tarClassList.find(t => t === v)) {
+                    return true
+                }
+                return false
+            })
+        }
+
         return (
             type != 'attributes' ||
             (type == 'attributes' && (attributeName == 'contenteditable' || target != tar))
@@ -42,19 +56,25 @@ export default class Change extends Mutation {
             // 数据过滤
             mutations = mutationsFilter(mutations, observer.target as Node)
 
-            // 存储数据
-            this.data.push(...mutations)
+            console.log(mutations)
 
-            // 标准模式下
-            if (!editor.isCompatibleMode) {
-                // 在非中文输入状态下时才保存数据
-                if (!editor.isComposing) {
-                    return this.asyncSave()
+            // const first = mutations[0].target as Element
+
+            if (mutations.length !== 0) {
+                // 存储数据
+                this.data.push(...mutations)
+
+                // 标准模式下
+                if (!editor.isCompatibleMode) {
+                    // 在非中文输入状态下时才保存数据
+                    if (!editor.isComposing) {
+                        return this.asyncSave()
+                    }
                 }
-            }
-            // 兼容模式下
-            else {
-                this.asyncSave()
+                // 兼容模式下
+                else {
+                    this.asyncSave()
+                }
             }
         })
     }
