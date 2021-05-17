@@ -75,37 +75,40 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
         const $tooltip = genBlockContainerTooltip(embedInstance)
         if ($tooltip != null) $container.append($tooltip)
 
-        editor.txt.eventHooks.keydownEvents.push(e => {
-            const $selection = editor.selection.getSelectionContainerElem()
-            if ($selection?.hasClass('we-embed-card-right')) {
-                // 重写删除事件
-                if (e.key === 'Backspace') {
-                    $container.remove()
-                } else if (e.key === 'ArrowLeft') {
-                    editor.selection.moveCursor($left.getNode())
-                    editor.selection.saveRange()
-                } else {
-                    e.preventDefault()
-                    editor.selection.moveCursor($container.next().getNode())
-                    editor.selection.saveRange()
-                }
-            }
+        const blockEvent = bindBlockEvent(editor)
+        editor.txt.eventHooks.keydownEvents.push(blockEvent)
 
-            if ($selection?.hasClass('we-embed-card-left')) {
-                if (e.key === 'ArrowUp') {
-                    e.preventDefault()
-                }
+        // editor.txt.eventHooks.keydownEvents.push(e => {
+        //     const $selection = editor.selection.getSelectionContainerElem()
+        //     if ($selection?.hasClass('we-embed-card-right')) {
+        //         // 重写删除事件
+        //         if (e.key === 'Backspace') {
+        //             $container.remove()
+        //         } else if (e.key === 'ArrowLeft') {
+        //             editor.selection.moveCursor($left.getNode())
+        //             editor.selection.saveRange()
+        //         } else {
+        //             e.preventDefault()
+        //             editor.selection.moveCursor($container.next().getNode())
+        //             editor.selection.saveRange()
+        //         }
+        //     }
 
-                if (e.key === 'ArrowRight') {
-                    e.preventDefault()
-                    editor.selection.moveCursor($right.getNode())
-                    editor.selection.saveRange()
-                } else {
-                    editor.selection.moveCursor($container.prev().getNode())
-                    editor.selection.saveRange()
-                }
-            }
-        })
+        //     if ($selection?.hasClass('we-embed-card-left')) {
+        //         if (e.key === 'ArrowUp') {
+        //             e.preventDefault()
+        //         }
+
+        //         if (e.key === 'ArrowRight') {
+        //             e.preventDefault()
+        //             editor.selection.moveCursor($right.getNode())
+        //             editor.selection.saveRange()
+        //         } else {
+        //             editor.selection.moveCursor($container.prev().getNode())
+        //             editor.selection.saveRange()
+        //         }
+        //     }
+        // })
     } else {
         // inline
         editor.txt.eventHooks.keydownEvents.push(e => {
@@ -251,4 +254,69 @@ export function bindEvent(editor: Editor): void {
             createNewP($container, editor)
         }
     })
+}
+
+function bindBlockEvent(editor: Editor) {
+    return (e: KeyboardEvent) => {
+        const $selection = editor.selection.getSelectionContainerElem()
+        console.log($selection)
+        // 可以定义一个类型来判断是不是$container对象
+        const $container = editor.selection.getSelectionRangeTopNodes()[0]
+        const $child = $container.childNodes()
+        console.log(1)
+        // let $left, $right
+        // $child?.forEach(v => {
+        //     if (v.className === 'we-embed-card-left') {
+        //         $left = v
+        //     }
+
+        //     if (v.className === 'we-embed-card-right') {
+        //         $right = v
+        //     }
+        // })
+
+        // console.log($left)
+        // console.log($right)
+
+        if ($selection?.hasClass('we-embed-card-right')) {
+            // 重写删除事件
+            if (e.key === 'Backspace') {
+                $container.remove()
+            } else if (e.key === 'ArrowLeft') {
+                // let $left
+                // $child?.forEach(v => {
+                //     if (v.className === 'we-embed-card-left') {
+                //         $left = v
+                //     }
+                // })
+                // if ($left) {
+                //     editor.selection.moveCursor($left)
+                //     editor.selection.saveRange()
+                // }
+            } else {
+                e.preventDefault()
+                console.log(2)
+                editor.selection.moveCursor($container.next().getNode())
+                editor.selection.saveRange()
+            }
+        }
+
+        if ($selection?.hasClass('we-embed-card-left')) {
+            if (e.key === 'ArrowUp') {
+                e.preventDefault()
+            }
+
+            if (e.key === 'ArrowRight') {
+                e.preventDefault()
+                // if ($right) {
+                //     editor.selection.moveCursor($right)
+                //     editor.selection.saveRange()
+                // }
+            } else {
+                console.log(3)
+                editor.selection.moveCursor($container.prev().getNode())
+                editor.selection.saveRange()
+            }
+        }
+    }
 }
