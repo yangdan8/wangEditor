@@ -19,15 +19,14 @@ function mutationsFilter(mutations: MutationRecord[], tar: Node) {
         const list = ['CodeMirror-cursors', 'we-embed-card-block-tooltip', 'cm-s-default']
         if (type === 'attributes') {
             const tarClassList = (target as Element).className.split(' ')
-            console.log(tarClassList)
-            console.log((target as Element).className)
 
-            list.some(v => {
+            const status = list.some(v => {
                 if (tarClassList.find(t => t === v)) {
                     return true
                 }
-                return false
             })
+
+            if (status) return false
         }
 
         return (
@@ -55,8 +54,6 @@ export default class Change extends Mutation {
         super((mutations, observer) => {
             // 数据过滤
             mutations = mutationsFilter(mutations, observer.target as Node)
-
-            console.log(mutations)
 
             // const first = mutations[0].target as Element
 
