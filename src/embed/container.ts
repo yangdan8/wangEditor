@@ -75,116 +75,12 @@ export function genEmbedContainerElem(embedInstance: IEmbed, editor: Editor): Do
         const $tooltip = genBlockContainerTooltip(embedInstance)
         if ($tooltip != null) $container.append($tooltip)
 
-        const blockEvent = bindBlockEvent(editor)
+        const blockEvent = bindBlockEvent(editor, id)
         editor.txt.eventHooks.keydownEvents.push(blockEvent)
-
-        // editor.txt.eventHooks.keydownEvents.push(e => {
-        //     const $selection = editor.selection.getSelectionContainerElem()
-        //     if ($selection?.hasClass('we-embed-card-right')) {
-        //         // 重写删除事件
-        //         if (e.key === 'Backspace') {
-        //             $container.remove()
-        //         } else if (e.key === 'ArrowLeft') {
-        //             editor.selection.moveCursor($left.getNode())
-        //             editor.selection.saveRange()
-        //         } else {
-        //             e.preventDefault()
-        //             editor.selection.moveCursor($container.next().getNode())
-        //             editor.selection.saveRange()
-        //         }
-        //     }
-
-        //     if ($selection?.hasClass('we-embed-card-left')) {
-        //         if (e.key === 'ArrowUp') {
-        //             e.preventDefault()
-        //         }
-
-        //         if (e.key === 'ArrowRight') {
-        //             e.preventDefault()
-        //             editor.selection.moveCursor($right.getNode())
-        //             editor.selection.saveRange()
-        //         } else {
-        //             editor.selection.moveCursor($container.prev().getNode())
-        //             editor.selection.saveRange()
-        //         }
-        //     }
-        // })
     } else {
         // inline
-        editor.txt.eventHooks.keydownEvents.push(e => {
-            const $selection = editor.selection.getSelectionContainerElem()
-            const wordRex = /^[A-Za-z]$/
-            const allowKey = ['ArrowLeft', 'ArrowRight', 'Backspace']
-            if ($selection?.hasClass('we-embed-card-right')) {
-                // 只修改左箭头和a-zA-Z的按键
-                if (wordRex.test(e.key) || allowKey.includes(e.key)) {
-                    e.preventDefault()
-                    // if (e.key === 'Backspace') {
-                    //     $container.remove()
-                    //     return
-                    // } else
-
-                    if (e.key === 'ArrowLeft') {
-                        editor.selection.moveCursor($left.getNode())
-                        editor.selection.saveRange()
-                        return
-                    }
-
-                    if (e.key === 'Backspace') {
-                        $container.remove()
-                        return
-                    }
-
-                    //这里一定要加零宽空格，否则光标无法正确移动
-                    let value = /^[A-Za-z]$/.test(e.key) ? e.key : ''
-
-                    if (editor.isComposing) {
-                        value = ''
-                    }
-
-                    let $span = $(`<span>&#8203${value}</span>`)
-                    let spanNode: Node
-
-                    if (!$container.next().length) {
-                        $span.insertAfter($container)
-                        spanNode = $span.childNodes()?.elems[0] || $span.getNode()
-                    } else {
-                        $span = $container.next()
-                        spanNode = $span.childNodes()?.elems[0] || $span.getNode()
-                        // TODO: 后续需要支持多标签内容，暂时多标签都会转为文字
-                        // TODO: 中文输入的情况需要坐下特殊处理
-
-                        spanNode.textContent = value + spanNode.textContent
-                    }
-
-                    editor.selection.moveCursor(spanNode, 2)
-                    editor.selection.saveRange()
-                }
-            }
-
-            if ($selection?.hasClass('we-embed-card-left')) {
-                if (wordRex.test(e.key) || allowKey.includes(e.key)) {
-                    e.preventDefault()
-
-                    if (e.key === 'ArrowRight' || e.key === 'Backspace') {
-                        editor.selection.moveCursor($right.getNode())
-                        editor.selection.saveRange()
-                        return
-                    }
-
-                    let value = wordRex.test(e.key) ? e.key : '&#8203'
-                    let $span = $(`<span>${value}</span>`)
-                    if (!$container.prev().length) {
-                        $span.insertBefore($container)
-                    } else {
-                        $span = $container.prev()
-                    }
-
-                    editor.selection.moveCursor($span.getNode())
-                    editor.selection.saveRange()
-                }
-            }
-        })
+        const inlineEvent = bindInlineEvent(editor, id)
+        editor.txt.eventHooks.keydownEvents.push(inlineEvent)
     }
 
     // 追加“回车”按钮
@@ -256,67 +152,161 @@ export function bindEvent(editor: Editor): void {
     })
 }
 
-function bindBlockEvent(editor: Editor) {
+function bindBlockEvent(editor: Editor, id: string) {
     return (e: KeyboardEvent) => {
-        const $selection = editor.selection.getSelectionContainerElem()
-        console.log($selection)
-        // 可以定义一个类型来判断是不是$container对象
         const $container = editor.selection.getSelectionRangeTopNodes()[0]
-        const $child = $container.childNodes()
-        console.log(1)
-        // let $left, $right
-        // $child?.forEach(v => {
-        //     if (v.className === 'we-embed-card-left') {
-        //         $left = v
-        //     }
+        if ($container.id === id) {
+            const $selection = editor.selection.getSelectionContainerElem()
+            const { $left, $right } = getContainerRightAndLeft($container)
 
-        //     if (v.className === 'we-embed-card-right') {
-        //         $right = v
-        //     }
-        // })
+            if ($selection?.hasClass('we-embed-card-right')) {
+                // 重写删除事件
+                if (e.key === 'Backspace') {
+                    $container.remove()
+                } else if (e.key === 'ArrowLeft') {
+                    if ($left) {
+                        editor.selection.moveCursor($left)
+                        editor.selection.saveRange()
+                    }
+                } else {
+                    e.preventDefault()
+                    const $next = $container.next()
+                    const input = /^[A-Za-z]$/.test(e.key) ? e.key : ''
+                    let nextText = $next.text()
 
-        // console.log($left)
-        // console.log($right)
+                    $next.text(`${input}${nextText}`)
+                    editor.selection.moveCursor($container.next().getNode(), 0)
+                    editor.selection.saveRange()
+                }
+            }
 
-        if ($selection?.hasClass('we-embed-card-right')) {
-            // 重写删除事件
-            if (e.key === 'Backspace') {
-                $container.remove()
-            } else if (e.key === 'ArrowLeft') {
-                // let $left
-                // $child?.forEach(v => {
-                //     if (v.className === 'we-embed-card-left') {
-                //         $left = v
-                //     }
-                // })
-                // if ($left) {
-                //     editor.selection.moveCursor($left)
-                //     editor.selection.saveRange()
-                // }
-            } else {
-                e.preventDefault()
-                console.log(2)
-                editor.selection.moveCursor($container.next().getNode())
-                editor.selection.saveRange()
+            if ($selection?.hasClass('we-embed-card-left')) {
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault()
+                }
+
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault()
+                    if ($right) {
+                        editor.selection.moveCursor($right)
+                        editor.selection.saveRange()
+                    }
+                } else {
+                    editor.selection.moveCursor($container.prev().getNode())
+                    editor.selection.saveRange()
+                }
             }
         }
+    }
+}
 
-        if ($selection?.hasClass('we-embed-card-left')) {
-            if (e.key === 'ArrowUp') {
-                e.preventDefault()
+function bindInlineEvent(editor: Editor, id: string) {
+    return (e: KeyboardEvent) => {
+        const $container = editor.selection.getSelectionRangeTopNodes()[0]
+        if ($container.id === id) {
+            const $selection = editor.selection.getSelectionContainerElem()
+            const wordRex = /^[A-Za-z]$/
+            const allowKey = ['ArrowLeft', 'ArrowRight', 'Backspace']
+            const { $left, $right } = getContainerRightAndLeft($container)
+
+            if ($selection?.hasClass('we-embed-card-right')) {
+                // 只修改左箭头和a-zA-Z的按键
+                if (wordRex.test(e.key) || allowKey.includes(e.key)) {
+                    e.preventDefault()
+
+                    if (e.key === 'ArrowLeft') {
+                        if ($left) {
+                            editor.selection.moveCursor($left)
+                            editor.selection.saveRange()
+                            return
+                        }
+                    }
+
+                    if (e.key === 'Backspace') {
+                        $container.remove()
+                        return
+                    }
+
+                    //这里一定要加零宽空格，否则光标无法正确移动
+                    let value = /^[A-Za-z]$/.test(e.key) ? e.key : ''
+
+                    if (editor.isComposing) {
+                        value = ''
+                    }
+
+                    let $span = $(`<span>&#8203${value}</span>`)
+                    let spanNode: Node
+
+                    if (!$container.next().length) {
+                        $span.insertAfter($container)
+                        spanNode = $span.childNodes()?.elems[0] || $span.getNode()
+                    } else {
+                        $span = $container.next()
+                        spanNode = $span.childNodes()?.elems[0] || $span.getNode()
+                        // TODO: 后续需要支持多标签内容，暂时多标签都会转为文字
+                        // TODO: 中文输入的情况需要坐下特殊处理
+
+                        spanNode.textContent = value + spanNode.textContent
+                    }
+
+                    editor.selection.moveCursor(spanNode, 2)
+                    editor.selection.saveRange()
+                }
             }
 
-            if (e.key === 'ArrowRight') {
-                e.preventDefault()
-                // if ($right) {
-                //     editor.selection.moveCursor($right)
-                //     editor.selection.saveRange()
-                // }
-            } else {
-                console.log(3)
-                editor.selection.moveCursor($container.prev().getNode())
-                editor.selection.saveRange()
+            if ($selection?.hasClass('we-embed-card-left')) {
+                if (wordRex.test(e.key) || allowKey.includes(e.key)) {
+                    e.preventDefault()
+
+                    if (e.key === 'ArrowRight' || e.key === 'Backspace') {
+                        if ($right) {
+                            editor.selection.moveCursor($right)
+                            editor.selection.saveRange()
+                            return
+                        }
+                    }
+
+                    let value = wordRex.test(e.key) ? e.key : '&#8203'
+                    let $span = $(`<span>${value}</span>`)
+                    if (!$container.prev().length) {
+                        $span.insertBefore($container)
+                    } else {
+                        $span = $container.prev()
+                    }
+
+                    editor.selection.moveCursor($span.getNode())
+                    editor.selection.saveRange()
+                }
             }
         }
+    }
+}
+
+/**
+ * 找到embed的左右垫片
+ * @param $container embed domElement
+ * @returns 左右垫片的节点
+ */
+function getContainerRightAndLeft(
+    $container: DomElement
+): {
+    $left: HTMLElement | null
+    $right: HTMLElement | null
+} {
+    const $child = $container.childNodes()
+    let $left: HTMLElement | null = null,
+        $right: HTMLElement | null = null
+    $child?.forEach(v => {
+        if (v.className === 'we-embed-card-left') {
+            $left = v
+        }
+
+        if (v.className === 'we-embed-card-right') {
+            $right = v
+        }
+    })
+    return {
+        $left,
+        $right,
     }
 }
