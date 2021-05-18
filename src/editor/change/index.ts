@@ -7,6 +7,7 @@ import Editor from '../index'
 import Mutation from '../../utils/observer/mutation'
 import { debounce } from '../../utils/util'
 import { EMPTY_FN } from '../../utils/const'
+import { filterList } from './filterList'
 
 /**
  * 剔除编辑区容器的 attribute 变化中的非 contenteditable 变化
@@ -16,17 +17,20 @@ import { EMPTY_FN } from '../../utils/const'
 function mutationsFilter(mutations: MutationRecord[], tar: Node) {
     // 剔除编辑区容器的 attribute 变化中的非 contenteditable 变化
     return mutations.filter(({ type, target, attributeName }) => {
-        const list = ['CodeMirror-cursors', 'we-embed-card-block-tooltip', 'cm-s-default']
-        if (type === 'attributes') {
-            const tarClassList = (target as Element).className.split(' ')
+        // ['CodeMirror-cursors', 'we-embed-card-block-tooltip', 'cm-s-default']
+        const list = Array.from(filterList)
+        if (list.length > 0) {
+            if (type === 'attributes') {
+                const tarClassList = (target as Element).className.split(' ')
 
-            const status = list.some(v => {
-                if (tarClassList.find(t => t === v)) {
-                    return true
-                }
-            })
+                const status = list.some(v => {
+                    if (tarClassList.find(t => t === v)) {
+                        return true
+                    }
+                })
 
-            if (status) return false
+                if (status) return false
+            }
         }
 
         return (

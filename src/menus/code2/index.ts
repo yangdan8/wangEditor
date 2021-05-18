@@ -9,6 +9,7 @@ import Editor from '../../editor/index'
 import { MenuActive } from '../menu-constructors/Menu'
 import createEmbedConf from './embed-conf/index'
 import { DEFAULT_LANG } from './embed-conf/const'
+import { setFilterList } from '../../editor/change/filterList'
 
 class Code2 extends BtnMenu implements MenuActive {
     constructor(editor: Editor) {
@@ -27,6 +28,8 @@ class Code2 extends BtnMenu implements MenuActive {
      * 点击事件
      */
     public clickHandler(): void {
+        const list = ['CodeMirror-cursors', 'we-embed-card-block-tooltip', 'cm-s-default']
+        setFilterList(list)
         this.editor.cmd.insertEmbed('code', {
             code: '',
             lang: DEFAULT_LANG,
