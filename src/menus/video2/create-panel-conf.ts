@@ -76,7 +76,8 @@ export default function (editor: Editor) {
 
     const insertVideoByInput = () => {
         const $input = $('#' + inputId)
-        const video = $input.val().trim()
+        const value = $input.val().trim()
+        const video = `<iframe src="${value}" style="width:100%;height:100%;"></iframe>`
 
         // 视频为空 不插入
         if (!video) return
@@ -125,7 +126,9 @@ export default function (editor: Editor) {
                         <input id="${inputId}"
                             type="text"
                             class="block"
-                            placeholder="${editor.i18next.t('如')}：<iframe src=... ></iframe>"/>
+                            placeholder="${editor.i18next.t(
+                                '如'
+                            )}：https://player.bilibili.com..."/>
                     </div>
                     <div class="w-e-button-container">
                         <button type="button" id="${btnOkId}">

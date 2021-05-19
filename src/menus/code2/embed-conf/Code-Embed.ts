@@ -54,8 +54,9 @@ class CodeEmbed implements IEmbed {
         const $elem = $('<div></div>')
         const id = getRandom('ace-editor-')
         $elem.attr('id', id)
-        $elem.css('border-top', '1px solid #ccc')
+        // $elem.css('border-top', '1px solid #ccc')
         $content.append($elem)
+        $content.css('border', '1px solid #ccc')
         // $container.append($elem)
 
         // 创建 AceEditor 实例，并记录

@@ -24,7 +24,9 @@ export default class VideoEmbed extends IEmbedConstruct implements IEmbed {
      */
     public render(): void {
         const video = $(`${this.data}`)
-        this.$content.append(video)
+        const $content = this.$content
+        $content.append(video)
+        $content.css('height', '500px')
         const videoInstance = video
         this.videoInstance = videoInstance
     }
@@ -34,10 +36,11 @@ export default class VideoEmbed extends IEmbedConstruct implements IEmbed {
      * @returns html 代码
      */
     public genResultHtml(): string {
-        const $videoInstance = this.videoInstance
+        const $videoInstance: DomElement = this.videoInstance
         const url = $videoInstance.attr('data-url') || $videoInstance.attr('src')
+        const tag = $videoInstance.getNodeName().toLowerCase()
 
-        return `<video src="${url}" controls="controls"></video>`
+        return `<${tag} src="${url}" controls="controls"></${tag}>`
     }
 
     public onClick(event: MouseEvent): void {
