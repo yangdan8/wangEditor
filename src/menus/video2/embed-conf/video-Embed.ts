@@ -39,8 +39,11 @@ export default class VideoEmbed extends IEmbedConstruct implements IEmbed {
         const $videoInstance: DomElement = this.videoInstance
         const url = $videoInstance.attr('data-url') || $videoInstance.attr('src')
         const tag = $videoInstance.getNodeName().toLowerCase()
+        if (tag === 'video') {
+            return `<${tag} src="${url}" controls="controls" style="width:100%;height:500px;"></${tag}>`
+        }
 
-        return `<${tag} src="${url}" controls="controls"></${tag}>`
+        return `<${tag} src="${url}" style="width:100%;height:500px;"></${tag}>`
     }
 
     public onClick(event: MouseEvent): void {
