@@ -407,7 +407,9 @@ export class DomElement<T extends DomElementSelector = DomElementSelector> {
             return false
         }
         const elem = this.elems[0]
-        if (!elem.className) {
+        const elemClassName = elem.className
+        console.log(elemClassName)
+        if (!elemClassName || typeof elemClassName !== 'string') {
             // 当前无 class
             return false
         }
