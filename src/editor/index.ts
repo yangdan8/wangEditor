@@ -65,7 +65,8 @@ class Editor {
     public zIndex: ZIndex
     public change: Change
     public history: History
-
+    // 是否处于格式刷的激活状态
+    public formatActiveFlag: Boolean
     // 实例销毁前需要执行的钩子集合
     private beforeDestroyHooks: Function[] = []
 
@@ -112,6 +113,7 @@ class Editor {
         const { disable, enable } = disableInit(this)
         this.disable = disable
         this.enable = enable
+        this.formatActiveFlag = false
     }
 
     /**

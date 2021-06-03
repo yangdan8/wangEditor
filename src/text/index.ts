@@ -59,6 +59,8 @@ type TextEventHooks = {
     splitLineEvents: ((e: DomElement) => void)[]
     /** 视频点击事件 */
     videoClickEvents: ((e: DomElement) => void)[]
+    /** 格式刷的鼠标抬起事件 */
+    formatBrushMouseupEvents: ((e: MouseEvent) => void)[]
 }
 
 class Text {
@@ -93,6 +95,7 @@ class Text {
             dropListMenuHoverEvents: [],
             splitLineEvents: [],
             videoClickEvents: [],
+            formatBrushMouseupEvents: [],
         }
     }
 
@@ -284,9 +287,11 @@ class Text {
         }
         $textElem.on('click', onceClickSaveRange)
 
-        function handleMouseUp() {
+        function handleMouseUp(e: MouseEvent) {
             // 在编辑器区域之外完成抬起，保存此时编辑区内的新选区，取消此时鼠标抬起事件
             saveRange()
+            // 执行格式刷的样式应用
+            handleFormatBrush(e)
             $document.off('mouseup', handleMouseUp)
         }
         function listenMouseLeave() {
@@ -294,6 +299,12 @@ class Text {
             $document.on('mouseup', handleMouseUp)
             // 首次移出时即接触leave监听，防止用户不断移入移出多次注册handleMouseUp
             $textElem.off('mouseleave', listenMouseLeave)
+        }
+        const handleFormatBrush = (e: MouseEvent) => {
+            // 如果处于格式刷的样式应用阶段就执行相关事件
+            if (editor.formatActiveFlag) {
+                this.eventHooks.formatBrushMouseupEvents.forEach(fn => fn(e))
+            }
         }
         $textElem.on('mousedown', () => {
             // mousedown 状态下，要坚听鼠标滑动到编辑区域外面
@@ -303,8 +314,11 @@ class Text {
         $textElem.on('mouseup', (e: MouseEvent) => {
             // 记得移除$textElem的mouseleave事件, 避免内存泄露
             $textElem.off('mouseleave', listenMouseLeave)
+            // 执行格式刷的样式应用
+            handleFormatBrush(e)
             // fix：避免当选中一段文字之后，再次点击文字中间位置无法更新selection问题。issue#3096
             setTimeout(() => {
+                // 执行鼠标抬起的事件
                 const selection = editor.selection
                 const range = selection.getRange()
                 if (range === null) return

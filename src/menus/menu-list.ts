@@ -27,6 +27,7 @@ import Table from './table/index'
 import Code from './code'
 import SplitLine from './split-line/index'
 import Todo from './todo'
+import FormatBrush from './format-brush'
 
 export type MenuListType = {
     [key: string]: any
@@ -36,6 +37,7 @@ export default {
     bold: Bold,
     head: Head,
     italic: Italic,
+    formatBrush: FormatBrush,
     link: Link,
     underline: Underline,
     strikeThrough: StrikeThrough,

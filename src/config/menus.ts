@@ -58,6 +58,7 @@ export default {
         'foreColor',
         'backColor',
         'link',
+        'formatBrush',
         'list',
         'todo',
         'justify',
