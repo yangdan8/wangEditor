@@ -12,6 +12,7 @@ import { updateRange } from './utils'
 
 import { HandlerListOptions } from './ListHandle/ListHandle'
 import ListHandleCommand, { createListHandle, ClassType } from './ListHandle'
+import bindEvent from './bind-event'
 
 /**
  * 列表的种类
@@ -61,6 +62,8 @@ class List extends DropListMenu implements MenuActive {
                 this.command(value as ListTypeValue)
             },
         }
+
+        bindEvent(editor)
 
         super($elem, editor, dropListConf)
     }
