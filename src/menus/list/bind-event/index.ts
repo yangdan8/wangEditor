@@ -46,11 +46,12 @@ function bindEvent(editor: Editor) {
             // 获取当前标签元素
             const $selectionElem = editor.selection.getSelectionContainerElem() as DomElement
             const $nextNode = $selectionElem.getNextSibling()
+            const parentName = $topSelectElem.getNodeName()
             // 光标在最前面的情况
             if (prevNode?.nodeName === 'LI' && pos === 0) {
                 e.preventDefault()
-                const $preUl = $(`<ul></ul>`)
-                const $nextUl = $(`<ul></ul>`)
+                const $preUl = $(`<${parentName}></${parentName}>`)
+                const $nextUl = $(`<${parentName}></${parentName}>`)
                 const $newP = $(EMPTY_P)
                 // 判断是否包裹在两个li标签之间
                 if ($nextNode.length > 0 && $nextNode?.getNodeName() === 'LI') {
