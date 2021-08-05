@@ -27,6 +27,9 @@ class Quote extends BtnMenu implements MenuActive {
      */
     public clickHandler(): void {
         const editor = this.editor
+        if (!editor.txt.html()) {
+            return
+        }
         const isSelectEmpty = editor.selection.isSelectionEmpty()
         let topNodeElem: DomElement[] = editor.selection.getSelectionRangeTopNodes()
         const $topNodeElem: DomElement = topNodeElem[topNodeElem.length - 1]

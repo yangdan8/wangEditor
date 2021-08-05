@@ -49,15 +49,15 @@ class Justify extends DropListMenu implements MenuActive {
                     ),
                     value: 'right',
                 },
-                {
-                    $elem: $(
-                        `<p>
-                            <i class="w-e-icon-paragraph-justify w-e-drop-list-item"></i>
-                            ${editor.i18next.t('menus.dropListMenu.justify.两端')}
-                        </p>`
-                    ),
-                    value: 'justify',
-                },
+                // {
+                //     $elem: $(
+                //         `<p>
+                //             <i class="w-e-icon-paragraph-justify w-e-drop-list-item"></i>
+                //             ${editor.i18next.t('menus.dropListMenu.justify.两端')}
+                //         </p>`
+                //     ),
+                //     value: 'justify',
+                // },
             ],
             clickHandler: (value: string) => {
                 // 执行对应的value操作
