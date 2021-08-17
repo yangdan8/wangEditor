@@ -65,16 +65,16 @@ export function createShowHideFn(editor: Editor) {
             },
         ]
 
-        conf.push({
-            $elem: $(`<span>${t('重置')}</span>`),
-            onClick: (editor: Editor, $node: DomElement) => {
-                $node.removeAttr('width')
-                $node.removeAttr('height')
+        // conf.push({
+        //     $elem: $(`<span>${t('重置')}</span>`),
+        //     onClick: (editor: Editor, $node: DomElement) => {
+        //         $node.removeAttr('width')
+        //         $node.removeAttr('height')
 
-                // 返回 true，表示执行完之后，隐藏 tooltip。否则不隐藏。
-                return true
-            },
-        })
+        //         // 返回 true，表示执行完之后，隐藏 tooltip。否则不隐藏。
+        //         return true
+        //     },
+        // })
 
         if ($node.attr('data-href')) {
             conf.push({
