@@ -65,8 +65,14 @@ export default class Change extends Mutation {
     private save() {
         // 有数据
         if (this.data.length) {
+            const { editor } = this
+            const $textElem = this.editor.$textElem
+            const ele = $textElem.elems[0]
+            if (ele.querySelector('img[data-is-loading="true"]')) {
+                return
+            }
             // 保存变化数据
-            this.editor.history.save(this.data)
+            editor.history.save(this.data)
 
             // 清除缓存
             this.data.length = 0
