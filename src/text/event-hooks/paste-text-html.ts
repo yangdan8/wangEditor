@@ -107,11 +107,11 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
                 // 用户自定义过滤处理粘贴内容
                 pasteText = '' + (pasteTextHandle(pasteText) || '')
             }
-            pasteText = formatCode(pasteText)
-            if (!validateLength(editor, pasteText)) {
+            const html = formatCode(pasteText)
+            if (!validateLength(editor, html)) {
                 return
             }
-            editor.cmd.do('insertHTML', pasteText)
+            editor.cmd.do('insertHTML', html)
             return
         }
 
@@ -152,11 +152,11 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
             let isCssStyle: boolean = /[\.\#\@]?\w+[ ]+\{[^}]*\}/.test(pasteHtml) // eslint-disable-line
             // 经过处理后还是包含暴露的css样式则直接插入它的text
             if (isCssStyle && pasteFilterStyle) {
-                pasteText = formatHtml(pasteText)
-                if (!validateLength(editor, pasteText)) {
+                const html = formatHtml(pasteText)
+                if (!validateLength(editor, html)) {
                     return
                 }
-                editor.cmd.do('insertHTML', pasteText) // text
+                editor.cmd.do('insertHTML', html) // text
             } else {
                 const html = formatHtml(pasteHtml)
                 if (!validateLength(editor, html)) {
@@ -202,10 +202,11 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
                 // 用户自定义过滤处理粘贴内容
                 pasteText = '' + (pasteTextHandle(pasteText) || '')
             }
-            if (!validateLength(editor, pasteText)) {
+            const html = formatHtml(pasteText)
+            if (!validateLength(editor, html)) {
                 return
             }
-            editor.cmd.do('insertHTML', `${formatHtml(pasteText)}`) // text
+            editor.cmd.do('insertHTML', `${html}`) // text
         }
     }
 
