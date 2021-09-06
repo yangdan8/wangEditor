@@ -103,6 +103,8 @@ export type ConfigType = {
     customInsertVideo: Function | null
 
     menuTooltipPosition: tooltipPositionType
+
+    maxLength: number
 }
 
 export type Resource = {
@@ -137,6 +139,9 @@ const defaultConfig = Object.assign(
         linkCheck: function (text: string, link: string): string | boolean {
             return true
         },
+    },
+    {
+        maxLength: 1e4,
     }
 )
 

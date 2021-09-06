@@ -62,6 +62,16 @@ function isEmptyParagraph(topElem: DomElement | undefined): boolean {
     return dom.nodeName === 'P' && dom.innerHTML === '<br>'
 }
 
+function validateLength(editor: Editor, str: string) {
+    const config = editor.config
+    const maxLength = config.maxLength
+    if (typeof str === 'string' && str.length > maxLength) {
+        config.customAlert('输入的内容最多允许 ${maxLength} 个字符！', 'error')
+        return false
+    }
+    return true
+}
+
 /**
  * 粘贴文本和 html
  * @param editor 编辑器对象
@@ -97,6 +107,9 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
                 // 用户自定义过滤处理粘贴内容
                 pasteText = '' + (pasteTextHandle(pasteText) || '')
             }
+            if (validateLength(editor, pasteText)) {
+                return
+            }
             editor.cmd.do('insertHTML', formatCode(pasteText))
             return
         }
@@ -113,10 +126,12 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
             const insertUrl = urlRegex.exec(pasteText)![0]
             const otherText = pasteText.replace(urlRegex, '')
 
-            return editor.cmd.do(
-                'insertHTML',
-                `<a href="${insertUrl}" target="_blank">${insertUrl}</a>${otherText}`
-            ) // html
+            const html = `<a href="${insertUrl}" target="_blank">${insertUrl}</a>${otherText}`
+            if (validateLength(editor, html)) {
+                return
+            }
+
+            return editor.cmd.do('insertHTML', html) // html
         }
         // table 中（td、th），待开发。。。
         if (!pasteHtml) {
@@ -129,13 +144,23 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
                 // 用户自定义过滤处理粘贴内容
                 pasteHtml = '' + (pasteTextHandle(pasteHtml) || '') // html
             }
+            if (validateLength(editor, pasteHtml)) {
+                return
+            }
             // 粘贴的html的是否是css的style样式
             let isCssStyle: boolean = /[\.\#\@]?\w+[ ]+\{[^}]*\}/.test(pasteHtml) // eslint-disable-line
             // 经过处理后还是包含暴露的css样式则直接插入它的text
             if (isCssStyle && pasteFilterStyle) {
-                editor.cmd.do('insertHTML', `${formatHtml(pasteText)}`) // text
+                pasteText = formatHtml(pasteText)
+                if (validateLength(editor, pasteText)) {
+                    return
+                }
+                editor.cmd.do('insertHTML', pasteText) // text
             } else {
                 const html = formatHtml(pasteHtml)
+                if (validateLength(editor, html)) {
+                    return
+                }
                 // 如果是段落，为了兼容 firefox 和 chrome差异，自定义插入
                 if (isParagraphHtml(html)) {
                     const $textEl = editor.$textElem
@@ -175,6 +200,9 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
             if (pasteTextHandle && isFunction(pasteTextHandle)) {
                 // 用户自定义过滤处理粘贴内容
                 pasteText = '' + (pasteTextHandle(pasteText) || '')
+            }
+            if (validateLength(editor, pasteText)) {
+                return
             }
             editor.cmd.do('insertHTML', `${formatHtml(pasteText)}`) // text
         }
