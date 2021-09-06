@@ -107,10 +107,11 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
                 // 用户自定义过滤处理粘贴内容
                 pasteText = '' + (pasteTextHandle(pasteText) || '')
             }
-            if (validateLength(editor, pasteText)) {
+            pasteText = formatCode(pasteText)
+            if (!validateLength(editor, pasteText)) {
                 return
             }
-            editor.cmd.do('insertHTML', formatCode(pasteText))
+            editor.cmd.do('insertHTML', pasteText)
             return
         }
 
@@ -127,7 +128,7 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
             const otherText = pasteText.replace(urlRegex, '')
 
             const html = `<a href="${insertUrl}" target="_blank">${insertUrl}</a>${otherText}`
-            if (validateLength(editor, html)) {
+            if (!validateLength(editor, html)) {
                 return
             }
 
@@ -144,7 +145,7 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
                 // 用户自定义过滤处理粘贴内容
                 pasteHtml = '' + (pasteTextHandle(pasteHtml) || '') // html
             }
-            if (validateLength(editor, pasteHtml)) {
+            if (!validateLength(editor, pasteHtml)) {
                 return
             }
             // 粘贴的html的是否是css的style样式
@@ -152,13 +153,13 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
             // 经过处理后还是包含暴露的css样式则直接插入它的text
             if (isCssStyle && pasteFilterStyle) {
                 pasteText = formatHtml(pasteText)
-                if (validateLength(editor, pasteText)) {
+                if (!validateLength(editor, pasteText)) {
                     return
                 }
                 editor.cmd.do('insertHTML', pasteText) // text
             } else {
                 const html = formatHtml(pasteHtml)
-                if (validateLength(editor, html)) {
+                if (!validateLength(editor, html)) {
                     return
                 }
                 // 如果是段落，为了兼容 firefox 和 chrome差异，自定义插入
@@ -201,7 +202,7 @@ function pasteTextHtml(editor: Editor, pasteEvents: Function[]) {
                 // 用户自定义过滤处理粘贴内容
                 pasteText = '' + (pasteTextHandle(pasteText) || '')
             }
-            if (validateLength(editor, pasteText)) {
+            if (!validateLength(editor, pasteText)) {
                 return
             }
             editor.cmd.do('insertHTML', `${formatHtml(pasteText)}`) // text
