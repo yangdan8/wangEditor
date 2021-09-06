@@ -66,7 +66,7 @@ function validateLength(editor: Editor, str: string) {
     const config = editor.config
     const maxLength = config.maxLength
     if (typeof str === 'string' && str.length > maxLength) {
-        config.customAlert('输入的内容最多允许 ${maxLength} 个字符！', 'error')
+        config.customAlert(`输入的内容最多允许 ${maxLength} 个字符！`, 'error')
         return false
     }
     return true
